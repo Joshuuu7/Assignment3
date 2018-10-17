@@ -9,7 +9,9 @@
 import UIKit
 import CoreData
 
-class TableViewController: UITableViewController {
+class TableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+    
+    var managedObjectContext: NSManagedObjectContext? = nil
     
     // MARK: - Outlets
     
@@ -25,7 +27,7 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //fetchData()
-        downloadJSONDataIfNeeded()
+        //downloadJSONDataIfNeeded()
     }
     
     override func didReceiveMemoryWarning() {
@@ -48,29 +50,33 @@ class TableViewController: UITableViewController {
     // Add a new team to the database
     @IBAction func addTeam(_ sender: AnyObject) {
         
-        let alert = UIAlertController(title: "Secret Team", message: "Add a new team", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Secret Book", message: "Add a new book", preferredStyle: .alert)
         
         alert.addTextField {
             textField in
-            textField.placeholder = "Team Name"
+            textField.placeholder = "Book Title"
         }
         
         alert.addTextField { textField in
-            textField.placeholder = "Division"
+            textField.placeholder = "Author"
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Release Year"
         }
         
         let saveAction = UIAlertAction(title: "Save", style: .default) {
             [unowned self] action in
             
-            guard let nameTextField = alert.textFields?.first, let divisionTextField = alert.textFields?.last else {
+            guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
                 return
             }
             
             let book = Book(context: self.coreDataStack.managedContext)
             
-            book.name = nameTextField.text
-            book.releaseYear = divisionTextField.text
-            book.imageName = team.teamName
+            book.title = titleTextField.text
+            book.author = authorTextField.text
+            book.releaseYear = releaseYearTextField.text
             self.coreDataStack.saveContext()
         }
         
@@ -116,8 +122,8 @@ class TableViewController: UITableViewController {
     // MARK: - Table view delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let team = fetchedResultsController.object(at: indexPath)
-        team.wins = team.wins + 1
+        let book = fetchedResultsController.object(at: indexPath)
+        //team.wins = team.wins + 1
         coreDataStack.saveContext()
         tableView.reloadData()
     }
@@ -127,34 +133,35 @@ class TableViewController: UITableViewController {
     // Configure table cell
     func configure(cell: UITableViewCell, for indexPath: IndexPath) {
         
-        guard let cell = cell as? TeamCell else {
+        guard let cell = cell as? BookCell else {
             return
         }
         
-        let team = fetchedResultsController.object(at: indexPath)
+        let book = fetchedResultsController.object(at: indexPath)
         
-        cell.logoImageView.image = UIImage(named: team.imageName!)
-        cell.teamLabel.text = team.teamName
-        cell.scoreLabel.text = "Wins: \(team.wins)"
+        cell.titleLabel.text = book.title
+        cell.authorLabel.text = book.author
+        cell.releaseYearLabel.text = book.releaseYear
+        
     }
     
     // Fetch data
     func fetchData() {
         
         // 1
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
         
-        let divisionSort = NSSortDescriptor(key: #keyPath(Team.division), ascending: true)
-        let scoreSort = NSSortDescriptor(key: #keyPath(Team.wins), ascending: false)
-        let nameSort = NSSortDescriptor(key: #keyPath(Team.teamName), ascending: true)
-        fetchRequest.sortDescriptors = [divisionSort, scoreSort, nameSort]
+        let titleSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
+        let authorSort = NSSortDescriptor(key: #keyPath(Book.author), ascending: false)
+        let releaseYearSort = NSSortDescriptor(key: #keyPath(Book.releaseYear), ascending: true)
+        fetchRequest.sortDescriptors = [titleSort, authorSort, releaseYearSort]
         
         fetchRequest.fetchBatchSize = 20
         
         // 2
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.managedContext, sectionNameKeyPath: #keyPath(Team.division), cacheName: "nfl")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.managedContext, sectionNameKeyPath: #keyPath(Book.title), cacheName: "assignment3")
         
-        fetchedResultsController.delegate = self
+        //fetchedResultsController.delegate = self
         
         // 3
         do {
@@ -166,8 +173,8 @@ class TableViewController: UITableViewController {
     }
     
     // Check if database is empty and download data if needed
-    func downloadJSONDataIfNeeded() {
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+    /*func downloadJSONDataIfNeeded() {
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
         let count = try! coreDataStack.managedContext.count(for: fetchRequest)
         
         guard count == 0 else {
@@ -184,10 +191,10 @@ class TableViewController: UITableViewController {
         } catch let error as NSError {
             print("Error fetching: \(error), \(error.userInfo)")
         }
-    }
+    }*/
     
     // Download JSON data
-    func downloadJSONData() {
+    /*func downloadJSONData() {
         
         guard let url = URL(string: "https://www.prismnet.com/~mcmahon/CS321/teams.json") else {
             // Perform some error handling
@@ -251,11 +258,11 @@ class TableViewController: UITableViewController {
         
         task.resume()
     }
-}
+}*/
 
 // MARK: - NSFetchedResultsControllerDelegate methods
 
-extension TableViewController: NSFetchedResultsControllerDelegate {
+/*extension TableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller:
         NSFetchedResultsController<NSFetchRequestResult>) {
@@ -271,7 +278,7 @@ extension TableViewController: NSFetchedResultsControllerDelegate {
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .automatic)
         case .update:
-            let cell = tableView.cellForRow(at: indexPath!) as! TeamCell
+            let cell = tableView.cellForRow(at: indexPath!) as! BookCell
             configure(cell: cell, for: indexPath!)
         case .move:
             tableView.deleteRows(at: [indexPath!], with: .automatic)
@@ -294,6 +301,6 @@ extension TableViewController: NSFetchedResultsControllerDelegate {
             tableView.deleteSections(indexSet, with: .automatic)
         default: break
         }
-    }
+    }*/
 }
 
