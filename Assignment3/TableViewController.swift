@@ -161,8 +161,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         }
         
         cell.titleLabel!.text = book.title
-        cell.authorLabel!.text = book.author
-        cell.releaseYearLabel!.text = book.releaseYear
+        cell.authorLabel!.text = "Author: \(book.author!)"
+        cell.releaseYearLabel!.text = "Release Year: \(book.releaseYear!)"
     }
 
     var fetchedResultsController: NSFetchedResultsController<Book> {
