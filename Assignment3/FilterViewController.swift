@@ -17,6 +17,7 @@ class FilterViewController: UITableViewController {
     
     // Sort By Section
     @IBOutlet weak var titleAZSortCell: UITableViewCell!
+    @IBOutlet weak var titleZASortCell: UITableViewCell!
     
     var coreDataStack: CoreDataStack!
     weak var delegate: FilterViewControllerDelegate?
@@ -56,10 +57,12 @@ class FilterViewController: UITableViewController {
         
         switch cell {
             
-            
         //Sort By section
         case titleAZSortCell:
             selectedSortDescriptor = titleSortDescriptor
+            
+        case titleZASortCell:
+            selectedSortDescriptor = titleSortDescriptor.reversedSortDescriptor as? NSSortDescriptor
 
         default: break
         }

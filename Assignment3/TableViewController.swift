@@ -12,6 +12,9 @@ import CoreData
 class TableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
     var managedObjectContext: NSManagedObjectContext? = nil
+    var fetchRequest: NSFetchRequest<Book>!
+    var coreDataStack: CoreDataStack!
+    var books: [Book] = []
     
     // MARK: - Outlets
     
@@ -240,45 +243,15 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         tableView.endUpdates()
     }
     
-    /*
-     // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
-     
-     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-     // In the simplest, most efficient, case, reload the table view.
-     tableView.reloadData()
-     }
-     */
-    
-
-
-    
-    // Fetch data
-    /*func fetchData() {
+    func fetchAndReload() {
         
-        // 1
-        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
-        
-        let titleSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
-        let authorSort = NSSortDescriptor(key: #keyPath(Book.author), ascending: false)
-        let releaseYearSort = NSSortDescriptor(key: #keyPath(Book.releaseYear), ascending: true)
-        fetchRequest.sortDescriptors = [titleSort, authorSort, releaseYearSort]
-        
-        fetchRequest.fetchBatchSize = 20
-        
-        // 2
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: fetchedResultsController.managedContext, sectionNameKeyPath: #keyPath(Book.title), cacheName: "assignment3")
-        
-        //fetchedResultsController.delegate = self
-        
-        // 3
         do {
-            try fetchedResultsController.performFetch()
+            books = try coreDataStack.managedContext.fetch(fetchRequest)
+            tableView.reloadData()
         } catch let error as NSError {
-            print("Fetching error: \(error), \(error.userInfo)")
+            print("Could not fetch \(error), \(error.userInfo)")
         }
-        
-    }*/
- 
+    }
     
 // MARK: - NSFetchedResultsControllerDelegate methods
 
@@ -322,5 +295,19 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         default: break
         }
     }*/
+}
+
+extension TableViewController: FilterViewControllerDelegate {
+    func filterViewController(filter: FilterViewController, didSelectPredicate predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?) {
+        fetchRequest.predicate = nil
+        fetchRequest.sortDescriptors = nil
+        fetchRequest.predicate = predicate
+        
+        if let sr = sortDescriptor {
+            fetchRequest.sortDescriptors = [sr]
+        }
+        
+        fetchAndReload()
+    }
 }
 
