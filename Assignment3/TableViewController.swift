@@ -19,11 +19,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     // MARK: - Properties
     
-    //var coreDataStack: CoreDataStack!
-    //var fetchedResultsController: NSFetchedResultsController<Book>!
-    
-    // MARK: - UIViewController methods
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //fetchData()
@@ -50,19 +45,22 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // Add a new team to the database
     @IBAction func addTeam(_ sender: AnyObject) {
         
-        let alert = UIAlertController(title: "Secret Book", message: "Add a new book", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Book Information", message: "Add a new book", preferredStyle: .alert)
         
         alert.addTextField {
             textField in
             textField.placeholder = "Book Title"
+            textField.textAlignment = .center
         }
         
         alert.addTextField { textField in
             textField.placeholder = "Author"
+            textField.textAlignment = .center
         }
         
         alert.addTextField { textField in
             textField.placeholder = "Release Year"
+            textField.textAlignment = .center
         }
         
         let saveAction = UIAlertAction(title: "Save", style: .default) {
@@ -76,8 +74,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             self.tableView.reloadData()
         }
         
-        alert.addAction(saveAction)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        alert.addAction(saveAction)
         present(alert, animated: true)
     }
     
