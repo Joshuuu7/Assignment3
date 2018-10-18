@@ -102,8 +102,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     // MARK: - Segues
     
-    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showPlayers" {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        /*if segue.identifier == "toFilterViewController" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let object = fetchedResultsController.object(at: indexPath)
                 let controller = segue.destination as! PlayerListViewController
@@ -111,8 +111,15 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 controller.managedObjectContext = managedObjectContext
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
-        }
-    }*/
+        }*/
+     guard segue.identifier == "toFilterViewController", let navController = segue.destination as? UINavigationController, let filterViewCcontroller = navController.topViewController
+     as? FilterViewController else {
+     return
+     }
+     
+     
+     //filterVC.delegate = self
+    }
     
     // MARK: - Table view data source methods
     
