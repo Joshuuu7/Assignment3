@@ -61,7 +61,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Library" id="vSh-LV-dmf">
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="add" id="qEK-H7-hhu"/>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="add" id="qEK-H7-hhu">
+                            <connections>
+                                <action selector="addTeam:" destination="4Gf-Ig-FaX" id="Fbr-SB-VX8"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="qEK-H7-hhu" id="nnG-KT-s2F"/>

@@ -19,8 +19,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     // MARK: - Properties
     
-    var coreDataStack: CoreDataStack!
-    var fetchedResultsController: NSFetchedResultsController<Book>!
+    //var coreDataStack: CoreDataStack!
+    //var fetchedResultsController: NSFetchedResultsController<Book>!
     
     // MARK: - UIViewController methods
     
@@ -72,12 +72,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 return
             }
             
-            let book = Book(context: self.coreDataStack.managedContext)
-            
-            book.title = titleTextField.text
-            book.author = authorTextField.text
-            book.releaseYear = releaseYearTextField.text
-            self.coreDataStack.saveContext()
+            self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
+            self.tableView.reloadData()
         }
         
         alert.addAction(saveAction)
@@ -85,15 +81,45 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         present(alert, animated: true)
     }
     
+    func save(title: String, author: String, releaseYear: String) {
+        let context = self.fetchedResultsController.managedObjectContext
+        
+        //Insert a new team into the context
+        let entity = NSEntityDescription.entity(forEntityName: "Book", in: context)!
+        let book = Book(entity: entity, insertInto: context)
+        book.title = title
+        book.author = author
+        book.releaseYear = releaseYear
+        
+        // Save the context.
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
+    
+    // MARK: - Segues
+    
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showPlayers" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let object = fetchedResultsController.object(at: indexPath)
+                let controller = segue.destination as! PlayerListViewController
+                controller.currentTeam = object
+                controller.managedObjectContext = managedObjectContext
+                controller.navigationItem.leftItemsSupplementBackButton = true
+            }
+        }
+    }*/
+    
     // MARK: - Table view data source methods
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
-        guard let sections = fetchedResultsController?.sections else {
-            return 0
-        }
-        
-        return sections.count
+        return fetchedResultsController.sections?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -103,50 +129,124 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sectionInfo = fetchedResultsController.sections?[section] else {
-            return 0
-        }
-        
+        let sectionInfo = fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath)
         
         // Configure the cell...
-        configure(cell: cell, for: indexPath)
+        let book = fetchedResultsController.object(at: indexPath)
+        configureCell(cell, withBook: book)
         
         return cell
     }
     
     // MARK: - Table view delegate methods
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let book = fetchedResultsController.object(at: indexPath)
         //team.wins = team.wins + 1
         coreDataStack.saveContext()
         tableView.reloadData()
-    }
+    }*/
     
     // MARK: - Helper methods
     
     // Configure table cell
-    func configure(cell: UITableViewCell, for indexPath: IndexPath) {
+    func configureCell(_ cell: UITableViewCell, withBook book : Book) {
         
         guard let cell = cell as? BookCell else {
             return
         }
         
-        let book = fetchedResultsController.object(at: indexPath)
+        cell.titleLabel!.text = book.title
+        cell.authorLabel!.text = book.author
+        cell.releaseYearLabel!.text = book.releaseYear
+    }
+
+    var fetchedResultsController: NSFetchedResultsController<Book> {
+        if _fetchedResultsController != nil {
+            return _fetchedResultsController!
+        }
         
-        cell.titleLabel.text = book.title
-        cell.authorLabel.text = book.author
-        cell.releaseYearLabel.text = book.releaseYear
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
         
+        // Set the batch size to a suitable number.
+        fetchRequest.fetchBatchSize = 20
+        
+        // Edit the sort key as appropriate.
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        // Edit the section name key path and cache name if appropriate.
+        // nil for section name key path means "no sections".
+        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Books")
+        aFetchedResultsController.delegate = self
+        _fetchedResultsController = aFetchedResultsController
+        
+        do {
+            try _fetchedResultsController!.performFetch()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+        return _fetchedResultsController!
+    }
+    var _fetchedResultsController: NSFetchedResultsController<Book>? = nil
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
     }
     
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        default:
+            return
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
+        case .move:
+            configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    
+    /*
+     // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
+     
+     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+     // In the simplest, most efficient, case, reload the table view.
+     tableView.reloadData()
+     }
+     */
+    
+
+
+    
     // Fetch data
-    func fetchData() {
+    /*func fetchData() {
         
         // 1
         let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
@@ -159,7 +259,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         fetchRequest.fetchBatchSize = 20
         
         // 2
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.managedContext, sectionNameKeyPath: #keyPath(Book.title), cacheName: "assignment3")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: fetchedResultsController.managedContext, sectionNameKeyPath: #keyPath(Book.title), cacheName: "assignment3")
         
         //fetchedResultsController.delegate = self
         
@@ -170,96 +270,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             print("Fetching error: \(error), \(error.userInfo)")
         }
         
-    }
-    
-    // Check if database is empty and download data if needed
-    /*func downloadJSONDataIfNeeded() {
-        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
-        let count = try! coreDataStack.managedContext.count(for: fetchRequest)
-        
-        guard count == 0 else {
-            fetchData()
-            return
-        }
-        
-        do {
-            let results = try coreDataStack.managedContext.fetch(fetchRequest)
-            results.forEach({ coreDataStack.managedContext.delete($0) })
-            
-            coreDataStack.saveContext()
-            downloadJSONData()
-        } catch let error as NSError {
-            print("Error fetching: \(error), \(error.userInfo)")
-        }
     }*/
+ 
     
-    // Download JSON data
-    /*func downloadJSONData() {
-        
-        guard let url = URL(string: "https://www.prismnet.com/~mcmahon/CS321/teams.json") else {
-            // Perform some error handling
-            print("Error: Invalid URL for JSON data.")
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) {
-            [weak self] (data, response, error) in
-            
-            let httpResponse = response as? HTTPURLResponse
-            
-            guard httpResponse!.statusCode == 200, data != nil, error == nil else {
-                print("Error: No JSON data downloaded")
-                return
-            }
-            
-            // Download succeeded
-            let array: [AnyObject]
-            print(String(data: data!, encoding: .utf8) ?? "Nope")
-            
-            let teamEntity = NSEntityDescription.entity(forEntityName: "Team", in: self!.coreDataStack.managedContext)!
-            
-            do {
-                array = try JSONSerialization.jsonObject(with: data!, options: []) as! [AnyObject]
-            } catch {
-                print("Unable to parse JSON data.")
-                return
-            }
-            
-            let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            privateMOC.parent = self!.coreDataStack.managedContext
-            
-            privateMOC.perform {
-                for dictionary in array {
-                    let team = Team(entity: teamEntity, insertInto: privateMOC)
-                    team.teamName = dictionary["teamName"] as? String
-                    team.division = dictionary["division"] as? String
-                    team.wins = Int32(dictionary["wins"] as! Int)
-                    team.imageName = dictionary["imageName"] as? String
-                }
-                
-                do {
-                    try privateMOC.save()
-                    self!.coreDataStack.managedContext.performAndWait {
-                        do {
-                            try self!.coreDataStack.managedContext.save()
-                        } catch {
-                            fatalError("Failure to save context: \(error)")
-                        }
-                    }
-                } catch {
-                    fatalError("Failure to save context: \(error)")
-                }
-                
-                DispatchQueue.main.async {
-                    self!.fetchData()
-                }
-            }
-        }
-        
-        task.resume()
-    }
-}*/
-
 // MARK: - NSFetchedResultsControllerDelegate methods
 
 /*extension TableViewController: NSFetchedResultsControllerDelegate {
