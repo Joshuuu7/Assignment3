@@ -12,9 +12,11 @@ import CoreData
 class TableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
     var managedObjectContext: NSManagedObjectContext? = nil
-    var fetchRequest: NSFetchRequest<Book>!
+    var fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
     var coreDataStack: CoreDataStack!
     var books: [Book] = []
+    var fetchedResultsController: NSFetchedResultsController<Book>!
+    var sortedFetchedResultsController: NSFetchedResultsController<Book>? = nil
     
     // MARK: - Outlets
     
@@ -24,8 +26,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //fetchData()
-        //downloadJSONDataIfNeeded()
+        fetchAndReload()
     }
     
     override func didReceiveMemoryWarning() {
@@ -83,10 +84,10 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     }
     
     func save(title: String, author: String, releaseYear: String) {
-        let context = self.fetchedResultsController.managedObjectContext
+        let context = self.managedObjectContext
         
         //Insert a new team into the context
-        let entity = NSEntityDescription.entity(forEntityName: "Book", in: context)!
+        let entity = NSEntityDescription.entity(forEntityName: "Book", in: context!)!
         let book = Book(entity: entity, insertInto: context)
         book.title = title
         book.author = author
@@ -94,7 +95,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         
         // Save the context.
         do {
-            try context.save()
+            try context?.save()
         } catch {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -120,8 +121,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
      return
      }
      
-      
-     //filterVC.delegate = self
+      filterViewCcontroller.coreDataStack = coreDataStack
+      filterViewCcontroller.delegate = self
     }
     
     @IBAction func unwindToTableViewController(_ segue: UIStoryboardSegue) {
@@ -133,6 +134,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         return fetchedResultsController.sections?.count ?? 0
     }
     
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         let sectionInfo = fetchedResultsController.sections?[section]
@@ -143,14 +145,15 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         let sectionInfo = fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
+ 
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> BookCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookInfoCell", for: indexPath)
         
         // Configure the cell...
         let book = fetchedResultsController.object(at: indexPath)
         configureCell(cell, withBook: book)
-        return cell
+        return cell as! BookCell
     }
     
     // MARK: - Table view delegate methods
@@ -175,8 +178,10 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         cell.authorLabel!.text = "Author: \(book.author!)"
         cell.releaseYearLabel!.text = "Release Year: \(book.releaseYear!)"
     }
-
+/*
     var fetchedResultsController: NSFetchedResultsController<Book> {
+       
+        //
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
@@ -209,7 +214,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         return _fetchedResultsController!
     }
     var _fetchedResultsController: NSFetchedResultsController<Book>? = nil
-    
+    */
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
@@ -245,56 +250,35 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     func fetchAndReload() {
         
+        // create fetched fetch request and fetched results controller
+        // 1
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
+        
+        let titleAZSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
+        let titleZASort = NSSortDescriptor(key: #keyPath(Book.title), ascending: false)
+        
+        fetchRequest.sortDescriptors = [titleAZSort, titleZASort]
+        
+        fetchRequest.fetchBatchSize = 20
+        
+        // 2
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: #keyPath(Book.title), cacheName: "assignment3")
+        
+        fetchedResultsController.delegate = self
+        
+        // 3
         do {
-            books = try coreDataStack.managedContext.fetch(fetchRequest)
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Fetching error: \(error), \(error.userInfo)")
+        }
+        do {
+            //_ = sortedFetchedResultsController?.managedObjectContext
             tableView.reloadData()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
-    
-// MARK: - NSFetchedResultsControllerDelegate methods
-
-/*extension TableViewController: NSFetchedResultsControllerDelegate {
-    
-    func controllerWillChangeContent(_ controller:
-        NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
-    func controller(_ controller:
-        NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .automatic)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .automatic)
-        case .update:
-            let cell = tableView.cellForRow(at: indexPath!) as! BookCell
-            configure(cell: cell, for: indexPath!)
-        case .move:
-            tableView.deleteRows(at: [indexPath!], with: .automatic)
-            tableView.insertRows(at: [newIndexPath!], with: .automatic)
-        }
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        
-        let indexSet = IndexSet(integer: sectionIndex)
-        
-        switch type {
-        case .insert:
-            tableView.insertSections(indexSet, with: .automatic)
-        case .delete:
-            tableView.deleteSections(indexSet, with: .automatic)
-        default: break
-        }
-    }*/
 }
 
 extension TableViewController: FilterViewControllerDelegate {
