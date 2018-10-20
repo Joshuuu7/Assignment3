@@ -169,17 +169,51 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+        } else if editingStyle == .insert {
+        
         }
     }
     
     // MARK: - Table view delegate methods
     
-    /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let book = fetchedResultsController.object(at: indexPath)
-        //team.wins = team.wins + 1
-        coreDataStack.saveContext()
-        tableView.reloadData()
-    }*/
+        
+        let alert = UIAlertController(title: "Book Information", message: "Edit book information", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.text = book.title
+            textField.textAlignment = .center
+        }
+        
+        alert.addTextField { textField in
+            textField.text = book.author
+            textField.textAlignment = .center
+        }
+        
+        alert.addTextField { textField in
+            textField.text = book.releaseYear
+            textField.textAlignment = .center
+        }
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) {
+            [unowned self] action in
+            
+            guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
+                return
+            }
+            
+            self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
+            self.tableView.reloadData()
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        alert.addAction(saveAction)
+        present(alert, animated: true)
+        
+        //coreDataStack.saveContext()
+        //tableView.reloadData()
+    }
     
     // MARK: - Helper methods
     
@@ -251,7 +285,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
+            configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
         case .update:
             configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
         case .move:
@@ -295,6 +329,24 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
+    
+    /*class TextField: UITextField {
+        
+        let padding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        
+        override open func textRect(forBounds bounds: CGRect) -> CGRect {
+            return UIEdgeInsetsInsetRect(bounds, padding)
+        }
+        
+        override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+            return UIEdgeInsetsInsetRect(bounds, padding)
+        }
+        
+        override open func editingRect(forBounds bounds: CGRect) -> CGRect {
+            return UIEdgeInsetsInsetRect(bounds, padding)
+        }
+    }*/
+    
 }
 
 extension TableViewController: FilterViewControllerDelegate {
