@@ -121,7 +121,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
      return
      }
      
-      filterViewCcontroller.coreDataStack = coreDataStack
+      filterViewCcontroller.fetchedResultsController = fetchedResultsController
       filterViewCcontroller.delegate = self
     }
     
@@ -285,12 +285,14 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
+            //configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
+            tableView.deleteRows(at: [indexPath!], with: .automatic)
         case .update:
             configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
         case .move:
-            configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+            //configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
+            tableView.deleteRows(at: [indexPath!], with: .automatic)
+            tableView.insertRows(at: [newIndexPath!], with: .automatic)
         }
     }
     

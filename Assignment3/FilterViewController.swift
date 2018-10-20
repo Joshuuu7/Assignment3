@@ -19,7 +19,8 @@ class FilterViewController: UITableViewController {
     @IBOutlet weak var titleAZSortCell: UITableViewCell!
     @IBOutlet weak var titleZASortCell: UITableViewCell!
     
-    var coreDataStack: CoreDataStack!
+    //var coreDataStack: CoreDataStack!
+    var fetchedResultsController: NSFetchedResultsController<Book>!
     weak var delegate: FilterViewControllerDelegate?
     var selectedSortDescriptor: NSSortDescriptor?
     var selectedPredicate: NSPredicate?
@@ -57,7 +58,7 @@ class FilterViewController: UITableViewController {
         
         switch cell {
             
-        //Sort By section
+        //Sort By Title Section
         case titleAZSortCell:
             selectedSortDescriptor = titleSortDescriptor
             
