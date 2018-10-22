@@ -135,11 +135,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     }
     
     
-    /*override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         let sectionInfo = fetchedResultsController.sections?[section]
         return sectionInfo?.name
-    }*/
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections![section]
@@ -170,14 +170,27 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         } else if editingStyle == .insert {
-        
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+            let context = fetchedResultsController.managedObjectContext
+            context.delete(fetchedResultsController.object(at: indexPath))
+            context.insert(fetchedResultsController.object(at: indexPath))
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
         }
+        tableView.reloadData()
     }
     
     // MARK: - Table view delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let book = fetchedResultsController.object(at: indexPath)
+        let context = self.managedObjectContext
         
         let alert = UIAlertController(title: "Book Information", message: "Edit book information", preferredStyle: .alert)
         
@@ -187,6 +200,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         }
         
         alert.addTextField { textField in
+            //textField.addConstraint(textField.heightAnchor.constraint(equalToConstant: 10))
+            //textField.isEnabled = true
             textField.text = book.author
             textField.textAlignment = .center
         }
@@ -204,14 +219,24 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             }
             
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
-            self.tableView.reloadData()
+            context?.delete(self.fetchedResultsController.object(at: indexPath))
+            context?.insert(self.fetchedResultsController.object(at: indexPath))
+            do {
+                try context?.save()
+                tableView.reloadData()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .default))
         alert.addAction(saveAction)
         present(alert, animated: true)
         
-        //coreDataStack.saveContext()
+        //context?.save()
         //tableView.reloadData()
     }
     
@@ -283,7 +308,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .delete:
             //configureCell(tableView.cellForRow(at: indexPath!)!, withBook: anObject as! Book)
             tableView.deleteRows(at: [indexPath!], with: .automatic)
