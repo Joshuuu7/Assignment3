@@ -219,16 +219,34 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             }
             
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
-            context?.delete(self.fetchedResultsController.object(at: indexPath))
-            context?.insert(self.fetchedResultsController.object(at: indexPath))
-            do {
-                try context?.save()
-                tableView.reloadData()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            
+            if ( ( alert.textFields?[0].text == book.title && alert.textFields?[1].text == book.author && alert.textFields?[2].text == book.releaseYear ) || ( (book.title?.contains(titleTextField.text!))! &&  (book.author?.contains(authorTextField.text!))! &&
+                (book.releaseYear?.contains(releaseYearTextField.text!))!
+                ) )
+            {
+                context?.delete(self.fetchedResultsController.object(at: indexPath))
+                do {
+                    try context?.save()
+                    tableView.reloadData()
+                } catch {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+            } else {
+                context?.delete(self.fetchedResultsController.object(at: indexPath))
+                
+                context?.insert(self.fetchedResultsController.object(at: indexPath))
+                do {
+                    try context?.save()
+                    tableView.reloadData()
+                } catch {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
         
