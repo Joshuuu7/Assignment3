@@ -26,7 +26,16 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchAndReload()
+        
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        //let sortDescriptor: NSSortDescriptor?
+        //if let sr = sortDescriptor {
+            //fetchRequest.sortDescriptors = [sortDescriptor]
+        //}
+        //var sr = [NSSortDescriptor]()
+        //sr.append(sortDescriptor)
+        
+        fetchAndReload(sort: [sortDescriptor])
     }
     
     override func didReceiveMemoryWarning() {
@@ -108,21 +117,28 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         /*if segue.identifier == "toFilterViewController" {
-            if let indexPath = tableView.indexPathForSelectedRow {
-                let object = fetchedResultsController.object(at: indexPath)
-                let controller = segue.destination as! PlayerListViewController
-                controller.currentTeam = object
-                controller.managedObjectContext = managedObjectContext
-                controller.navigationItem.leftItemsSupplementBackButton = true
-            }
-        }*/
-     guard segue.identifier == "toFilterViewController", let navController = segue.destination as? UINavigationController, let filterViewCcontroller = navController.topViewController
-     as? FilterViewController else {
-     return
-     }
-     
-      filterViewCcontroller.fetchedResultsController = fetchedResultsController
-      filterViewCcontroller.delegate = self
+         if let indexPath = tableView.indexPathForSelectedRow {
+         let object = fetchedResultsController.object(at: indexPath)
+         let controller = segue.destination as! PlayerListViewController
+         controller.currentTeam = object
+         controller.managedObjectContext = managedObjectContext
+         controller.navigationItem.leftItemsSupplementBackButton = true
+         }
+         }*/
+        guard segue.identifier == "toFilterViewController", let navController = segue.destination as? UINavigationController, let filterViewCcontroller = navController.topViewController
+            as? FilterViewController else {
+                if let indexPath = tableView.indexPathForSelectedRow {
+                    let object = fetchedResultsController.object(at: indexPath)
+                    let controller = segue.destination as! TableViewController
+                    controller.books = [object]
+                    controller.managedObjectContext = managedObjectContext
+                    //controller.navigationItem.leftItemsSupplementBackButton = true
+                }
+                return
+        }
+        
+        filterViewCcontroller.fetchedResultsController = fetchedResultsController
+        filterViewCcontroller.delegate = self
     }
     
     @IBAction func unwindToTableViewController(_ segue: UIStoryboardSegue) {
@@ -135,11 +151,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     }
     
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    /*override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         let sectionInfo = fetchedResultsController.sections?[section]
         return sectionInfo?.name
-    }
+    }*/
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections![section]
@@ -169,7 +185,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
-        } else if editingStyle == .insert {
+        } /*else if editingStyle == .insert {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
             let context = fetchedResultsController.managedObjectContext
             context.delete(fetchedResultsController.object(at: indexPath))
@@ -182,7 +198,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
-        }
+        } */
         tableView.reloadData()
     }
     
@@ -220,14 +236,22 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
             
-            if ( ( alert.textFields?[0].text == book.title && alert.textFields?[1].text == book.author && alert.textFields?[2].text == book.releaseYear ) || ( (book.title?.contains(titleTextField.text!))! &&  (book.author?.contains(authorTextField.text!))! &&
-                (book.releaseYear?.contains(releaseYearTextField.text!))!
-                ) )
+            if ( tableView.cellForRow(at: indexPath)?.isSelected == true &&
+                //( alert.textFields?[0].text == book.title && alert.textFields?[1].text == book.author && alert.textFields?[2].text == book.releaseYear )
+                //||
+                /*( (book.title?.isEqualToString(find: titleTextField.text!))! &&  (book.author?.isEqualToString(find: authorTextField.text!))! &&
+                (book.releaseYear?.isEqualToString(find: releaseYearTextField.text!))!
+                ) )*/
+                (book.title?.elementsEqual(titleTextField.text!))! == true && (book.author?.elementsEqual(authorTextField.text!))! == true &&
+                (book.releaseYear?.elementsEqual(releaseYearTextField.text!))! == true
+                )
             {
-                context?.delete(self.fetchedResultsController.object(at: indexPath))
                 do {
+                    print("Row is identical, no insertion needed.")
                     try context?.save()
-                    tableView.reloadData()
+                    //tableView.reloadData()
+                    tableView.cellForRow(at: indexPath)
+                    tableView.reloadRows(at: [indexPath], with: .top)
                 } catch {
                     // Replace this implementation with code to handle the error appropriately.
                     // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -235,12 +259,17 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                     fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                 }
             } else {
-                context?.delete(self.fetchedResultsController.object(at: indexPath))
+                //self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
                 
                 context?.insert(self.fetchedResultsController.object(at: indexPath))
+                context?.delete(self.fetchedResultsController.object(at: indexPath))
+                
                 do {
+                    print("Row is NOT identical, row updated.")
                     try context?.save()
-                    tableView.reloadData()
+                    //tableView.reloadData()
+                    tableView.reloadRows(at: [indexPath], with: .top)
+                   
                 } catch {
                     // Replace this implementation with code to handle the error appropriately.
                     // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -255,7 +284,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         present(alert, animated: true)
         
         //context?.save()
-        //tableView.reloadData()
+        tableView.reloadData()
     }
     
     // MARK: - Helper methods
@@ -308,6 +337,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     }
     var _fetchedResultsController: NSFetchedResultsController<Book>? = nil
     */
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
@@ -343,16 +373,16 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         tableView.endUpdates()
     }
     
-    func fetchAndReload() {
+    func fetchAndReload(sort: [NSSortDescriptor]) {
         
         // create fetched fetch request and fetched results controller
         // 1
         let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
         
-        let titleAZSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
-        let titleZASort = NSSortDescriptor(key: #keyPath(Book.title), ascending: false)
+        //let titleAZSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
+        //let titleZASort = NSSortDescriptor(key: #keyPath(Book.title), ascending: false)
         
-        fetchRequest.sortDescriptors = [titleAZSort, titleZASort]
+        fetchRequest.sortDescriptors = sort
         
         fetchRequest.fetchBatchSize = 20
         
@@ -396,15 +426,21 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
 
 extension TableViewController: FilterViewControllerDelegate {
     func filterViewController(filter: FilterViewController, didSelectPredicate predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?) {
-        fetchRequest.predicate = nil
-        fetchRequest.sortDescriptors = nil
-        fetchRequest.predicate = predicate
+        //fetchRequest.predicate = nil
+        //fetchRequest.sortDescriptors = nil
+        //fetchRequest.predicate = predicate
         
-        if let sr = sortDescriptor {
-            fetchRequest.sortDescriptors = [sr]
-        }
+        //if let sr = sortDescriptor {
+        //    fetchRequest.sortDescriptors = [sr]
+        //}
         
-        fetchAndReload()
+        fetchAndReload(sort: [sortDescriptor!])
+    }
+}
+
+extension String {
+    func isEqualToString(find: String) -> Bool {
+        return String(format: self) == find
     }
 }
 
