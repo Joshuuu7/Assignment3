@@ -113,29 +113,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         }
     }
     
-    func editBook(title: String, author: String, releaseYear: String) {
-        let context = self.managedObjectContext
-        
-        //Insert a new team into the context
-        let entity = NSEntityDescription.entity(forEntityName: "Book", in: context!)!
-        let book = Book(entity: entity, insertInto: context)
-        
-        
-        
-        book.title = title
-        book.author = author
-        book.releaseYear = releaseYear
-        
-        do {
-            try context?.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        
-    }
     
     // MARK: - Segues
     
@@ -269,7 +246,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                  ) )*/
             if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! ) ) )
             {
-                print("Row is identical, no insertion needed.")
+                print("Row is identical, no update needed.")
             } else {
                 
                 book.title! = titleTextField.text!
@@ -282,7 +259,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 context?.insert(self.fetchedResultsController.object(at: indexPath))
                 
                 do {
-                    print("Row is NOT identical, row updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
+                    print("Row is DIFFERENT, updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
                     try context?.save()
                     //tableView.reloadData()
                     tableView.reloadRows(at: [indexPath], with: .top)
