@@ -113,6 +113,30 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         }
     }
     
+    func editBook(title: String, author: String, releaseYear: String) {
+        let context = self.managedObjectContext
+        
+        //Insert a new team into the context
+        let entity = NSEntityDescription.entity(forEntityName: "Book", in: context!)!
+        let book = Book(entity: entity, insertInto: context)
+        
+        
+        
+        book.title = title
+        book.author = author
+        book.releaseYear = releaseYear
+        
+        do {
+            try context?.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+    }
+    
     // MARK: - Segues
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -234,41 +258,35 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 return
             }
             
-            self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
-            
-            if ( tableView.cellForRow(at: indexPath)?.isSelected == true &&
+            /*if ( tableView.cellForRow(at: indexPath)?.isSelected == true &&
+                ( ( (book.title?.elementsEqual(titleTextField.text!))! == true && (book.title?.count == titleTextField.text?.count) ) && ( (book.author?.elementsEqual(authorTextField.text!))! == true && (book.author?.count == authorTextField.text?.count)) &&
+                ( (book.releaseYear?.elementsEqual(releaseYearTextField.text!))! == true && (book.releaseYear?.count == releaseYearTextField.text?.count)) )
+                )*/
                 //( alert.textFields?[0].text == book.title && alert.textFields?[1].text == book.author && alert.textFields?[2].text == book.releaseYear )
                 //||
                 /*( (book.title?.isEqualToString(find: titleTextField.text!))! &&  (book.author?.isEqualToString(find: authorTextField.text!))! &&
-                (book.releaseYear?.isEqualToString(find: releaseYearTextField.text!))!
-                ) )*/
-                (book.title?.elementsEqual(titleTextField.text!))! == true && (book.author?.elementsEqual(authorTextField.text!))! == true &&
-                (book.releaseYear?.elementsEqual(releaseYearTextField.text!))! == true
-                )
+                 (book.releaseYear?.isEqualToString(find: releaseYearTextField.text!))!
+                 ) )*/
+            if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! ) ) )
             {
-                do {
-                    print("Row is identical, no insertion needed.")
-                    try context?.save()
-                    //tableView.reloadData()
-                    tableView.cellForRow(at: indexPath)
-                    tableView.reloadRows(at: [indexPath], with: .top)
-                } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    let nserror = error as NSError
-                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                }
+                print("Row is identical, no insertion needed.")
             } else {
-                //self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
                 
-                context?.insert(self.fetchedResultsController.object(at: indexPath))
+                book.title! = titleTextField.text!
+                book.author! = authorTextField.text!
+                book.releaseYear! = releaseYearTextField.text!
+                
+                self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
+                
                 context?.delete(self.fetchedResultsController.object(at: indexPath))
+                context?.insert(self.fetchedResultsController.object(at: indexPath))
                 
                 do {
-                    print("Row is NOT identical, row updated.")
+                    print("Row is NOT identical, row updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
                     try context?.save()
                     //tableView.reloadData()
                     tableView.reloadRows(at: [indexPath], with: .top)
+                    tableView.reloadData()
                    
                 } catch {
                     // Replace this implementation with code to handle the error appropriately.
@@ -284,7 +302,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         present(alert, animated: true)
         
         //context?.save()
-        tableView.reloadData()
+        //tableView.reloadData()
     }
     
     // MARK: - Helper methods
