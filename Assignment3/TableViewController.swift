@@ -58,9 +58,10 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // Add a new team to the database
     @IBAction func addTeam(_ sender: AnyObject) {
         
-        var fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
         //fetchRequest.predicate = NSPredicate(format: "title = %@", title)
-        var results: [NSManagedObject] = []
+        var titleResults: [NSManagedObject] = []
+        var authorResults: [NSManagedObject] = []
 
         
         let alert = UIAlertController(title: "Book Information", message: "Add a new book", preferredStyle: .alert)
@@ -91,22 +92,28 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 return
             }
             
-            //Check whether the book title exists in the database.
+            //Check whether the book title or author exist in the database.
             fetchRequest.predicate = NSPredicate(format: "title == %@", titleTextField.text!)
+            fetchRequest.predicate = NSPredicate(format: "author == %@", authorTextField.text!)
             
             do {
-                results = (try self.managedObjectContext?.fetch(fetchRequest))!
+                titleResults = (try self.managedObjectContext?.fetch(fetchRequest))!
             }
             catch {
-                print("Error executing fetch request: \(error)")
+                print("Error executing Title fetch request: \(error)")
             }
-            
-            //If the book exists display an error alert.
-            if ( results.count > 0 ) {
-                //(fetchRequest.predicate == NSPredicate(format: "title = %@", NSString(value: titleTextField.text! as String))) {
-                //( results = try managedObjectContext.fetch(fetchRequest) ) {
-                //( managedObjectContext?.fetch(fetchRequest).contains("\(titleTextField.text!)" ))
-                //( entity.propertiesByName.keys.contains("\(titleTextField.text!)") ) {
+            do {
+                authorResults = (try self.managedObjectContext?.fetch(fetchRequest))!
+            }
+            catch {
+                print("Error executing Author fetch request: \(error)")
+            }
+        
+            // If the book and author exists as a record display an error alert. Reason: There could be
+            // several books with the same name, there are also authors of many books, only in this specific
+            // case would this be relevant.
+            if ( titleResults.count > 0 && authorResults.count > 0 ) {
+        
                 let alert = UIAlertController(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.", preferredStyle: .alert)
                 
                 self.present(alert, animated: true, completion: nil)
@@ -241,80 +248,91 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // MARK: - Table view delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let book = fetchedResultsController.object(at: indexPath)
-        let context = self.managedObjectContext
         
-        let alert = UIAlertController(title: "Book Information", message: "Edit book information", preferredStyle: .alert)
+        let editOrViewAlert = UIAlertController(title: "Choose an option", message: "Edit or View Book Details?", preferredStyle: .alert)
         
-        alert.addTextField { textField in
-            textField.text = book.title
-            textField.textAlignment = .center
-            textField.keyboardType = .default
-        }
-        
-        alert.addTextField { textField in
-            //textField.addConstraint(textField.heightAnchor.constraint(equalToConstant: 10))
-            //textField.isEnabled = true
-            textField.text = book.author
-            textField.textAlignment = .center
-            textField.keyboardType = .default
-        }
-        
-        alert.addTextField { textField in
-            textField.text = book.releaseYear
-            textField.textAlignment = .center
-            textField.keyboardType = .numberPad
-        }
-        
-        let saveAction = UIAlertAction(title: "Save", style: .default) {
+        let editAction = UIAlertAction(title: "Edit", style: .default) {
             [unowned self] action in
             
-            guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
-                return
+            
+            let book = self.fetchedResultsController.object(at: indexPath)
+            let context = self.managedObjectContext
+            
+            let alert = UIAlertController(title: "Book Information", message: "Edit book information", preferredStyle: .alert)
+            
+            alert.addTextField { textField in
+                textField.text = book.title
+                textField.textAlignment = .center
+                textField.keyboardType = .default
             }
             
-            /*if ( tableView.cellForRow(at: indexPath)?.isSelected == true &&
-                ( ( (book.title?.elementsEqual(titleTextField.text!))! == true && (book.title?.count == titleTextField.text?.count) ) && ( (book.author?.elementsEqual(authorTextField.text!))! == true && (book.author?.count == authorTextField.text?.count)) &&
-                ( (book.releaseYear?.elementsEqual(releaseYearTextField.text!))! == true && (book.releaseYear?.count == releaseYearTextField.text?.count)) )
-                )*/
+            alert.addTextField { textField in
+                //textField.addConstraint(textField.heightAnchor.constraint(equalToConstant: 10))
+                //textField.isEnabled = true
+                textField.text = book.author
+                textField.textAlignment = .center
+                textField.keyboardType = .default
+            }
+            
+            alert.addTextField { textField in
+                textField.text = book.releaseYear
+                textField.textAlignment = .center
+                textField.keyboardType = .numberPad
+            }
+            
+            let saveAction = UIAlertAction(title: "Save", style: .default) {
+                [unowned self] action in
+                
+                guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
+                    return
+                }
+                
+                /*if ( tableView.cellForRow(at: indexPath)?.isSelected == true &&
+                 ( ( (book.title?.elementsEqual(titleTextField.text!))! == true && (book.title?.count == titleTextField.text?.count) ) && ( (book.author?.elementsEqual(authorTextField.text!))! == true && (book.author?.count == authorTextField.text?.count)) &&
+                 ( (book.releaseYear?.elementsEqual(releaseYearTextField.text!))! == true && (book.releaseYear?.count == releaseYearTextField.text?.count)) )
+                 )*/
                 //( alert.textFields?[0].text == book.title && alert.textFields?[1].text == book.author && alert.textFields?[2].text == book.releaseYear )
                 //||
                 /*( (book.title?.isEqualToString(find: titleTextField.text!))! &&  (book.author?.isEqualToString(find: authorTextField.text!))! &&
                  (book.releaseYear?.isEqualToString(find: releaseYearTextField.text!))!
                  ) )*/
-            if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! ) ) )
-            {
-                print("Row is identical, no update needed.")
-            } else {
-                
-                book.title! = titleTextField.text!
-                book.author! = authorTextField.text!
-                book.releaseYear! = releaseYearTextField.text!
-                
-                self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
-                
-                context?.delete(self.fetchedResultsController.object(at: indexPath))
-                context?.insert(self.fetchedResultsController.object(at: indexPath))
-                
-                do {
-                    print("Row is DIFFERENT, updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
-                    try context?.save()
-                    //tableView.reloadData()
-                    tableView.reloadRows(at: [indexPath], with: .top)
-                    tableView.reloadData()
-                   
-                } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    let nserror = error as NSError
-                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! ) ) )
+                {
+                    print("Row is identical, no update needed.")
+                } else {
+                    
+                    book.title! = titleTextField.text!
+                    book.author! = authorTextField.text!
+                    book.releaseYear! = releaseYearTextField.text!
+                    
+                    self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
+                    
+                    context?.delete(self.fetchedResultsController.object(at: indexPath))
+                    context?.insert(self.fetchedResultsController.object(at: indexPath))
+                    
+                    do {
+                        print("Row is DIFFERENT, updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
+                        try context?.save()
+                        //tableView.reloadData()
+                        tableView.reloadRows(at: [indexPath], with: .top)
+                        tableView.reloadData()
+                        
+                    } catch {
+                        // Replace this implementation with code to handle the error appropriately.
+                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                        let nserror = error as NSError
+                        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                    }
                 }
             }
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+            alert.addAction(saveAction)
+            self.present(alert, animated: true)
         }
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
-        alert.addAction(saveAction)
-        present(alert, animated: true)
+        editOrViewAlert.addAction(editAction)
+        editOrViewAlert.addAction(UIAlertAction(title: "View", style: .default))
+        self.present(editOrViewAlert, animated: true)
         
         //context?.save()
         //tableView.reloadData()
