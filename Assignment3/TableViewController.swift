@@ -58,22 +58,30 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // Add a new team to the database
     @IBAction func addTeam(_ sender: AnyObject) {
         
+        var fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
+        //fetchRequest.predicate = NSPredicate(format: "title = %@", title)
+        var results: [NSManagedObject] = []
+
+        
         let alert = UIAlertController(title: "Book Information", message: "Add a new book", preferredStyle: .alert)
         
         alert.addTextField {
             textField in
             textField.placeholder = "Book Title"
             textField.textAlignment = .center
+            textField.keyboardType = .default
         }
         
         alert.addTextField { textField in
             textField.placeholder = "Author"
             textField.textAlignment = .center
+            textField.keyboardType = .default
         }
         
         alert.addTextField { textField in
             textField.placeholder = "Release Year"
             textField.textAlignment = .center
+            textField.keyboardType = .numberPad
         }
         
         let saveAction = UIAlertAction(title: "Save", style: .default) {
@@ -83,14 +91,41 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 return
             }
             
+            //Check whether the book title exists in the database.
+            fetchRequest.predicate = NSPredicate(format: "title == %@", titleTextField.text!)
+            
+            do {
+                results = (try self.managedObjectContext?.fetch(fetchRequest))!
+            }
+            catch {
+                print("Error executing fetch request: \(error)")
+            }
+            
+            //If the book exists display an error alert.
+            if ( results.count > 0 ) {
+                //(fetchRequest.predicate == NSPredicate(format: "title = %@", NSString(value: titleTextField.text! as String))) {
+                //( results = try managedObjectContext.fetch(fetchRequest) ) {
+                //( managedObjectContext?.fetch(fetchRequest).contains("\(titleTextField.text!)" ))
+                //( entity.propertiesByName.keys.contains("\(titleTextField.text!)") ) {
+                let alert = UIAlertController(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.", preferredStyle: .alert)
+                
+                self.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
+                    alert.dismiss(animated: true, completion: nil)
+                })
+                
+            } else {
+            
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
             self.tableView.reloadData()
+            }
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .default))
         alert.addAction(saveAction)
         present(alert, animated: true)
     }
+
     
     func save(title: String, author: String, releaseYear: String) {
         let context = self.managedObjectContext
@@ -214,6 +249,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         alert.addTextField { textField in
             textField.text = book.title
             textField.textAlignment = .center
+            textField.keyboardType = .default
         }
         
         alert.addTextField { textField in
@@ -221,11 +257,13 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             //textField.isEnabled = true
             textField.text = book.author
             textField.textAlignment = .center
+            textField.keyboardType = .default
         }
         
         alert.addTextField { textField in
             textField.text = book.releaseYear
             textField.textAlignment = .center
+            textField.keyboardType = .numberPad
         }
         
         let saveAction = UIAlertAction(title: "Save", style: .default) {
@@ -374,10 +412,10 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         // 1
         let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
         
-        //let titleAZSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
+        let titleAZSort = NSSortDescriptor(key: #keyPath(Book.title), ascending: true)
         //let titleZASort = NSSortDescriptor(key: #keyPath(Book.title), ascending: false)
         
-        fetchRequest.sortDescriptors = sort
+        fetchRequest.sortDescriptors = [titleAZSort]
         
         fetchRequest.fetchBatchSize = 20
         
