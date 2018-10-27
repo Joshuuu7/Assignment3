@@ -112,6 +112,14 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             // If the book and author exists as a record display an error alert. Reason: There could be
             // several books with the same name, there are also authors of many books, only in this specific
             // case would this be relevant.
+            /*if ( titleResults.count > 0  ) {
+                
+                print("Executed title condition only")
+                
+                let titleAlert = UIAlertController(title: "Book already exists?", message: "\n If this is a book written by a different author with the same name add it, otherwise lease edit a current book.", preferredStyle: .alert)
+                titleAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(titleAlert, animated: true, completion: nil)
+            }*/
             if ( titleResults.count > 0 && authorResults.count > 0 ) {
         
                 let alert = UIAlertController(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.", preferredStyle: .alert)
@@ -242,18 +250,30 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 textField.text = book.title
                 textField.textAlignment = .center
                 textField.keyboardType = .default
+                if ( textField.text == "")
+                {
+                    textField.placeholder = "Title"
+                }
             }
             
             alert.addTextField { textField in
                 textField.text = book.author
                 textField.textAlignment = .center
                 textField.keyboardType = .default
+                if ( textField.text == "")
+                {
+                    textField.placeholder = "Author"
+                }
             }
             
             alert.addTextField { textField in
                 textField.text = book.releaseYear
                 textField.textAlignment = .center
                 textField.keyboardType = .numberPad
+                if ( textField.text == "")
+                {
+                    textField.placeholder = "Release Year"
+                }
             }
             
             let saveAction = UIAlertAction(title: "Save", style: .default) {
@@ -364,7 +384,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         fetchRequest.fetchBatchSize = 20
         
         // 2
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: #keyPath(Book.title), cacheName: "assignment3")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: #keyPath(Book.title), cacheName: "Library")
         
         fetchedResultsController.delegate = self
         

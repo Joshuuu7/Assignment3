@@ -20,7 +20,7 @@ extension Book {
     @NSManaged public var title: String?
     @NSManaged public var author: String?
     @NSManaged public var releaseYear: String?
-    @NSManaged public var rating: Double
+    @NSManaged public var rating: String?
     @NSManaged public var image: NSObject?
 
 }
