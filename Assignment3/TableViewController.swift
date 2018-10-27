@@ -159,15 +159,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // MARK: - Segues
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        /*if segue.identifier == "toFilterViewController" {
-         if let indexPath = tableView.indexPathForSelectedRow {
-         let object = fetchedResultsController.object(at: indexPath)
-         let controller = segue.destination as! PlayerListViewController
-         controller.currentTeam = object
-         controller.managedObjectContext = managedObjectContext
-         controller.navigationItem.leftItemsSupplementBackButton = true
-         }
-         }*/
         guard segue.identifier == "toFilterViewController", let navController = segue.destination as? UINavigationController, let filterViewCcontroller = navController.topViewController
             as? FilterViewController else {
                 if let indexPath = tableView.indexPathForSelectedRow {
@@ -228,20 +219,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
-        } /*else if editingStyle == .insert {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-            let context = fetchedResultsController.managedObjectContext
-            context.delete(fetchedResultsController.object(at: indexPath))
-            context.insert(fetchedResultsController.object(at: indexPath))
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        } */
+        }
         tableView.reloadData()
     }
     
@@ -267,8 +245,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             }
             
             alert.addTextField { textField in
-                //textField.addConstraint(textField.heightAnchor.constraint(equalToConstant: 10))
-                //textField.isEnabled = true
                 textField.text = book.author
                 textField.textAlignment = .center
                 textField.keyboardType = .default
@@ -286,16 +262,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
                     return
                 }
-                
-                /*if ( tableView.cellForRow(at: indexPath)?.isSelected == true &&
-                 ( ( (book.title?.elementsEqual(titleTextField.text!))! == true && (book.title?.count == titleTextField.text?.count) ) && ( (book.author?.elementsEqual(authorTextField.text!))! == true && (book.author?.count == authorTextField.text?.count)) &&
-                 ( (book.releaseYear?.elementsEqual(releaseYearTextField.text!))! == true && (book.releaseYear?.count == releaseYearTextField.text?.count)) )
-                 )*/
-                //( alert.textFields?[0].text == book.title && alert.textFields?[1].text == book.author && alert.textFields?[2].text == book.releaseYear )
-                //||
-                /*( (book.title?.isEqualToString(find: titleTextField.text!))! &&  (book.author?.isEqualToString(find: authorTextField.text!))! &&
-                 (book.releaseYear?.isEqualToString(find: releaseYearTextField.text!))!
-                 ) )*/
+
                 if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! ) ) )
                 {
                     print("Row is identical, no update needed.")
@@ -313,7 +280,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                     do {
                         print("Row is DIFFERENT, updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
                         try context?.save()
-                        //tableView.reloadData()
                         tableView.reloadRows(at: [indexPath], with: .top)
                         tableView.reloadData()
                         
@@ -333,9 +299,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         editOrViewAlert.addAction(editAction)
         editOrViewAlert.addAction(UIAlertAction(title: "View", style: .default))
         self.present(editOrViewAlert, animated: true)
-        
-        //context?.save()
-        //tableView.reloadData()
     }
     
     // MARK: - Helper methods
@@ -351,43 +314,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         cell.authorLabel!.text = "Author: \(book.author!)"
         cell.releaseYearLabel!.text = "Release Year: \(book.releaseYear!)"
     }
-/*
-    var fetchedResultsController: NSFetchedResultsController<Book> {
-       
-        //
-        if _fetchedResultsController != nil {
-            return _fetchedResultsController!
-        }
-        
-        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
-        
-        // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = 20
-        
-        // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-        
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Books")
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-        
-        do {
-            try _fetchedResultsController!.performFetch()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        
-        return _fetchedResultsController!
-    }
-    var _fetchedResultsController: NSFetchedResultsController<Book>? = nil
-    */
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
@@ -455,43 +381,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
-    
-    /*class TextField: UITextField {
-        
-        let padding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        
-        override open func textRect(forBounds bounds: CGRect) -> CGRect {
-            return UIEdgeInsetsInsetRect(bounds, padding)
-        }
-        
-        override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-            return UIEdgeInsetsInsetRect(bounds, padding)
-        }
-        
-        override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-            return UIEdgeInsetsInsetRect(bounds, padding)
-        }
-    }*/
-    
 }
 
 extension TableViewController: FilterViewControllerDelegate {
     func filterViewController(filter: FilterViewController, didSelectPredicate predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?) {
-        //fetchRequest.predicate = nil
-        //fetchRequest.sortDescriptors = nil
-        //fetchRequest.predicate = predicate
-        
-        //if let sr = sortDescriptor {
-        //    fetchRequest.sortDescriptors = [sr]
-        //}
-        
         fetchAndReload(sort: [sortDescriptor!])
-    }
-}
-
-extension String {
-    func isEqualToString(find: String) -> Bool {
-        return String(format: self) == find
     }
 }
 
