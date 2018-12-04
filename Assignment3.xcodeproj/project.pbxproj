@@ -15,6 +15,7 @@
 		426C78AF2176FC8A00808A80 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426C78AE2176FC8A00808A80 /* CoreDataStack.swift */; };
 		426C78B12177C42700808A80 /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426C78B02177C42700808A80 /* BookCell.swift */; };
 		426C78B921783F3900808A80 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426C78B821783F3900808A80 /* FilterViewController.swift */; };
+		428CC6BC21B04FFA00A0474E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428CC6BB21B04FFA00A0474E /* DetailViewController.swift */; };
 		42BA18F62185031E00CA312E /* Library.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 42BA18F42185031E00CA312E /* Library.xcdatamodeld */; };
 		42BA18F9218503BB00CA312E /* Book+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA18F7218503BA00CA312E /* Book+CoreDataClass.swift */; };
 		42BA18FA218503BB00CA312E /* Book+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA18F8218503BB00CA312E /* Book+CoreDataProperties.swift */; };
@@ -31,6 +32,7 @@
 		426C78AE2176FC8A00808A80 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		426C78B02177C42700808A80 /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		426C78B821783F3900808A80 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		428CC6BB21B04FFA00A0474E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		42BA18F52185031E00CA312E /* Library.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Library.xcdatamodel; sourceTree = "<group>"; };
 		42BA18F7218503BA00CA312E /* Book+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Book+CoreDataClass.swift"; path = "../Book+CoreDataClass.swift"; sourceTree = "<group>"; };
 		42BA18F8218503BB00CA312E /* Book+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Book+CoreDataProperties.swift"; path = "../Book+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				426C78992176F3CF00808A80 /* AppDelegate.swift */,
 				426C789B2176F3CF00808A80 /* TableViewController.swift */,
 				426C78B821783F3900808A80 /* FilterViewController.swift */,
+				428CC6BB21B04FFA00A0474E /* DetailViewController.swift */,
 				426C78B02177C42700808A80 /* BookCell.swift */,
 				426C78AE2176FC8A00808A80 /* CoreDataStack.swift */,
 				42BA18F7218503BA00CA312E /* Book+CoreDataClass.swift */,
@@ -153,6 +156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				428CC6BC21B04FFA00A0474E /* DetailViewController.swift in Sources */,
 				426C789C2176F3CF00808A80 /* TableViewController.swift in Sources */,
 				426C78B921783F3900808A80 /* FilterViewController.swift in Sources */,
 				42BA18F9218503BB00CA312E /* Book+CoreDataClass.swift in Sources */,

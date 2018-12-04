@@ -7,9 +7,59 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Detail View Controller-->
+        <scene sceneID="gxL-nP-QU9">
+            <objects>
+                <viewController id="CJD-GA-Unz" customClass="DetailViewController" customModule="Assignment3" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2U9-yr-4BT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzR-OY-3GE">
+                                <rect key="frame" x="166" y="99" width="79" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Author Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ub-Sl-5LO">
+                                <rect key="frame" x="166" y="161" width="98" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rating Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2c-Mm-QtW">
+                                <rect key="frame" x="166" y="229" width="95" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Release Year Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Nh-69-b1j">
+                                <rect key="frame" x="166" y="306" width="144" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qRJ-6a-Cn6">
+                                <rect key="frame" x="67" y="363" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="0xC-hf-SN1"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fms-JV-7x6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="284" y="-685.00749625187416"/>
+        </scene>
         <!--Table View Controller-->
         <scene sceneID="0lE-iF-7oL">
             <objects>
@@ -41,28 +91,43 @@
                                             <size key="shadowOffset" width="0.0" height="1"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Release Year Label" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nd9-FT-PwC">
-                                            <rect key="frame" x="16" y="84" width="343" height="10"/>
+                                            <rect key="frame" x="16" y="84" width="140" height="10"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="140" id="zuz-X2-xbc"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="8"/>
-                                            <color key="textColor" red="0.66799789669999998" green="0.47512125970000002" blue="0.25860109930000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                             <size key="shadowOffset" width="0.0" height="1"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGr-Fg-F5T">
+                                            <rect key="frame" x="219" y="84" width="140" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="140" id="Wta-hy-Ttt"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Nd9-FT-PwC" firstAttribute="leading" secondItem="dki-lp-DGK" secondAttribute="leadingMargin" id="2nm-ZS-QUL"/>
                                         <constraint firstItem="Nd9-FT-PwC" firstAttribute="top" secondItem="b5c-I9-5eN" secondAttribute="bottom" constant="4" id="HsW-ig-Lxs"/>
                                         <constraint firstItem="wE9-hd-i3q" firstAttribute="trailing" secondItem="dki-lp-DGK" secondAttribute="trailingMargin" id="NL0-GY-t9y"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="TGr-Fg-F5T" secondAttribute="bottom" constant="4" id="P06-rO-Hp0"/>
                                         <constraint firstItem="b5c-I9-5eN" firstAttribute="trailing" secondItem="dki-lp-DGK" secondAttribute="trailingMargin" id="PIB-Aq-HPU"/>
                                         <constraint firstItem="wE9-hd-i3q" firstAttribute="top" secondItem="dki-lp-DGK" secondAttribute="topMargin" constant="4" id="S58-Ru-ACB"/>
+                                        <constraint firstItem="TGr-Fg-F5T" firstAttribute="top" secondItem="b5c-I9-5eN" secondAttribute="bottom" constant="4" id="YFA-7P-Ryu"/>
                                         <constraint firstItem="b5c-I9-5eN" firstAttribute="leading" secondItem="dki-lp-DGK" secondAttribute="leadingMargin" id="aRT-E8-bYT"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Nd9-FT-PwC" secondAttribute="bottom" constant="15" id="csr-n4-WO8"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="TGr-Fg-F5T" secondAttribute="trailing" id="dHr-Y9-ULy"/>
                                         <constraint firstItem="b5c-I9-5eN" firstAttribute="top" secondItem="wE9-hd-i3q" secondAttribute="bottom" constant="10" id="eeV-62-Jpc"/>
                                         <constraint firstItem="wE9-hd-i3q" firstAttribute="leading" secondItem="dki-lp-DGK" secondAttribute="leadingMargin" id="hbF-zJ-wtC"/>
-                                        <constraint firstItem="Nd9-FT-PwC" firstAttribute="trailing" secondItem="dki-lp-DGK" secondAttribute="trailingMargin" id="imW-Ql-DcN"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="authorLabel" destination="b5c-I9-5eN" id="ly7-hP-yQT"/>
+                                    <outlet property="ratingLabel" destination="TGr-Fg-F5T" id="tWg-Wq-Dp4"/>
                                     <outlet property="releaseYearLabel" destination="Nd9-FT-PwC" id="abW-nt-eHo"/>
                                     <outlet property="titleLabel" destination="wE9-hd-i3q" id="aY9-hJ-3gY"/>
                                 </connections>
@@ -87,11 +152,12 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="qEK-H7-hhu" id="nnG-KT-s2F"/>
+                        <segue destination="CJD-GA-Unz" kind="show" identifier="toDetailViewController" id="RfI-cP-dli"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZK3-PS-dR5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-422" y="29"/>
+            <point key="canvasLocation" x="-423.19999999999999" y="28.335832083958024"/>
         </scene>
         <!--Filter View Controller-->
         <scene sceneID="2kC-Ab-S8q">

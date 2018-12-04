@@ -85,10 +85,16 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             textField.keyboardType = .numberPad
         }
         
+        alert.addTextField { textField in
+            textField.placeholder = "Rating"
+            textField.textAlignment = .center
+            textField.keyboardType = .numberPad
+        }
+        
         let saveAction = UIAlertAction(title: "Save", style: .default) {
             [unowned self] action in
             
-            guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
+            guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2], let ratingTextField = alert.textFields?[3] else {
                 return
             }
             
@@ -131,7 +137,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 
             } else {
             
-            self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
+            self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
             self.tableView.reloadData()
             }
         }
@@ -142,7 +148,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     }
 
     
-    func save(title: String, author: String, releaseYear: String) {
+    func save(title: String, author: String, releaseYear: String, rating: String) {
         let context = self.managedObjectContext
         
         //Insert a new team into the context
@@ -151,6 +157,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         book.title = title
         book.author = author
         book.releaseYear = releaseYear
+        book.rating = rating
         
         // Save the context.
         do {
@@ -171,13 +178,24 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             as? FilterViewController else {
                 if let indexPath = tableView.indexPathForSelectedRow {
                     let object = fetchedResultsController.object(at: indexPath)
-                    let controller = segue.destination as! TableViewController
+                    let controller = segue.destination as! DetailViewController
                     controller.books = [object]
                     controller.managedObjectContext = managedObjectContext
                     //controller.navigationItem.leftItemsSupplementBackButton = true
                 }
                 return
         }
+        
+        guard segue.identifier == "toDetailViewController", let detailViewController = segue.destination as? UIViewController else {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let object = fetchedResultsController.object(at: indexPath)
+                let controller = segue.destination as! DetailViewController
+                controller.books = [object]
+                controller.managedObjectContext = managedObjectContext
+            }
+            return
+        }
+        
         
         filterViewCcontroller.fetchedResultsController = fetchedResultsController
         filterViewCcontroller.delegate = self
@@ -237,9 +255,14 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         
         let editOrViewAlert = UIAlertController(title: "Choose an option", message: "Edit or View Book Details?", preferredStyle: .alert)
         
-        let editAction = UIAlertAction(title: "Edit", style: .default) {
+        let viewAction = UIAlertAction(title: "View", style: .default) {
             [unowned self] action in
             
+            self.performSegue(withIdentifier: "toDetailViewController", sender: self)
+        }
+        
+        let editAction = UIAlertAction(title: "Edit", style: .default) {
+            [unowned self] action in
             
             let book = self.fetchedResultsController.object(at: indexPath)
             let context = self.managedObjectContext
@@ -276,14 +299,24 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 }
             }
             
+            alert.addTextField { textField in
+                textField.text = book.rating
+                textField.textAlignment = .center
+                textField.keyboardType = .numberPad
+                if ( textField.text == "")
+                {
+                    textField.placeholder = "Rating"
+                }
+            }
+            
             let saveAction = UIAlertAction(title: "Save", style: .default) {
                 [unowned self] action in
                 
-                guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2] else {
+                guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2], let ratingTextField = alert.textFields?[3] else {
                     return
                 }
 
-                if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! ) ) )
+                if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! && book.rating! == ratingTextField.text! ) ) )
                 {
                     print("Row is identical, no update needed.")
                 } else {
@@ -291,8 +324,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                     book.title! = titleTextField.text!
                     book.author! = authorTextField.text!
                     book.releaseYear! = releaseYearTextField.text!
+                    book.rating = ratingTextField.text!
                     
-                    self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!)
+                    self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating:  ratingTextField.text!)
                     
                     context?.delete(self.fetchedResultsController.object(at: indexPath))
                     context?.insert(self.fetchedResultsController.object(at: indexPath))
@@ -317,7 +351,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             self.present(alert, animated: true)
         }
         editOrViewAlert.addAction(editAction)
-        editOrViewAlert.addAction(UIAlertAction(title: "View", style: .default))
+        editOrViewAlert.addAction(viewAction)
         self.present(editOrViewAlert, animated: true)
     }
     
@@ -330,9 +364,43 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             return
         }
         
+        var ratingInt: Int?
+        var year: Int?
+        
+        if book.rating == nil {
+            book.rating = "0"
+            ratingInt = Int(book.rating!)!
+            //book.image = 0 as NSObject
+        }
+        
+        ratingInt = Int(book.rating!)
+        year = Int(book.releaseYear!)
+        
         cell.titleLabel!.text = book.title
         cell.authorLabel!.text = "Author: \(book.author!)"
         cell.releaseYearLabel!.text = "Release Year: \(book.releaseYear!)"
+        cell.ratingLabel!.text = "Rating : \(ratingInt!) / 5"
+        //cell.ratingLabel!.text = "Rating : \(String(describing: ratingInt)) / 5"
+        
+        if ratingInt == nil {
+            cell.ratingLabel.text = "Rating : 0 / 5"
+            cell.ratingLabel.textColor = UIColor.blue
+        } else if ratingInt! <= 2 {
+            cell.ratingLabel!.textColor = UIColor.red
+            cell.ratingLabel!.shadowColor = UIColor.black
+        } else {
+            cell.ratingLabel!.textColor = UIColor.green
+        }
+        
+        if year == nil {
+            cell.releaseYearLabel!.text = "Undeclared"
+            cell.releaseYearLabel!.textColor = UIColor.darkGray
+        } else if year! >= 2010 {
+            cell.releaseYearLabel!.textColor = UIColor.green
+            //cell.releaseYearLabel!.shadowColor = UIColor.black
+        } else {
+            cell.releaseYearLabel!.textColor = UIColor.orange
+        }
     }
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
