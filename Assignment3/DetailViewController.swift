@@ -29,10 +29,12 @@ class DetailViewController: UIViewController {
                 label.text = detail.author
             }
             if let label = ratingLabel {
-                label.text = detail.rating
+                label.textColor = UIColor.green
+                label.text = "Rating: " + detail.rating!
             }
             if let label = releaseYearLabel {
-                label.text = detail.releaseYear
+                label.textColor = UIColor.green
+                label.text = "Release year: " + detail.releaseYear!
             }
         }
     }
