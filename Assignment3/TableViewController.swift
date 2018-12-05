@@ -174,31 +174,30 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // MARK: - Segues
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == "toFilterViewController", let navController = segue.destination as? UINavigationController, let filterViewCcontroller = navController.topViewController
-            as? FilterViewController else {
-                if let indexPath = tableView.indexPathForSelectedRow {
-                    let object = fetchedResultsController.object(at: indexPath)
-                    let controller = segue.destination as! DetailViewController
-                    controller.books = [object]
-                    controller.managedObjectContext = managedObjectContext
-                    //controller.navigationItem.leftItemsSupplementBackButton = true
-                }
+        if segue.identifier == "toFilterViewController" {
+            guard let navController = segue.destination as? UINavigationController, let filterViewCcontroller = navController.topViewController as? FilterViewController else {
                 return
-        }
-        
-        guard segue.identifier == "toDetailViewController", let detailViewController = segue.destination as? UIViewController else {
+            }
             if let indexPath = tableView.indexPathForSelectedRow {
                 let object = fetchedResultsController.object(at: indexPath)
                 let controller = segue.destination as! DetailViewController
                 controller.books = [object]
                 controller.managedObjectContext = managedObjectContext
+                filterViewCcontroller.fetchedResultsController = fetchedResultsController
+                filterViewCcontroller.delegate = self
+                    //controller.navigationItem.leftItemsSupplementBackButton = true
             }
-            return
+        } else if segue.identifier == "toDetailViewController" {
+            guard let detailViewController = segue.destination as? DetailViewController else {
+                return
+            }
+            if let indexPath = tableView?.indexPathForSelectedRow {
+                let object = fetchedResultsController.object(at: indexPath)
+                detailViewController.detailItem = object
+                //detailViewController.books = [object]
+                detailViewController.managedObjectContext = managedObjectContext
+            }
         }
-        
-        
-        filterViewCcontroller.fetchedResultsController = fetchedResultsController
-        filterViewCcontroller.delegate = self
     }
     
     @IBAction func unwindToTableViewController(_ segue: UIStoryboardSegue) {
