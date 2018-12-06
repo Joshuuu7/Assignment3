@@ -56,13 +56,14 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // MARK: - Actions
     
     // Add a new team to the database
-    @IBAction func addTeam(_ sender: AnyObject) {
+    @IBAction func addBook(_ sender: AnyObject) {
         
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
         //fetchRequest.predicate = NSPredicate(format: "title = %@", title)
         var titleResults: [NSManagedObject] = []
         var authorResults: [NSManagedObject] = []
-
+        var ratingInt: Int?
+        var yearInt: Int?
         
         let alert = UIAlertController(title: "Book Information", message: "Add a new book", preferredStyle: .alert)
         
@@ -86,7 +87,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         }
         
         alert.addTextField { textField in
-            textField.placeholder = "Rating"
+            textField.placeholder = "Rating ( 1 - 5 )"
             textField.textAlignment = .center
             textField.keyboardType = .numberPad
         }
@@ -97,6 +98,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2], let ratingTextField = alert.textFields?[3] else {
                 return
             }
+            
+            ratingInt = Int("\(ratingTextField)")
+            yearInt = Int("\(releaseYearTextField)")
             
             //Check whether the book title or author exist in the database.
             fetchRequest.predicate = NSPredicate(format: "title == %@", titleTextField.text!)
@@ -135,7 +139,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                     alert.dismiss(animated: true, completion: nil)
                 })
                 
-            } else {
+            } /*else if ( ratingInt! > 5 ) {
+                
+            } else if ( yearInt! > 2019 ) {
+                
+            }*/ else {
             
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
             self.tableView.reloadData()
@@ -384,17 +392,37 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         if ratingInt == nil {
             cell.ratingLabel.text = "Rating : 0 / 5"
             cell.ratingLabel.textColor = UIColor.blue
-        } else if ratingInt! <= 2 {
+        } else if ratingInt! == 1 {
             cell.ratingLabel!.textColor = UIColor.red
+            cell.ratingLabel!.shadowColor = UIColor.gray
+        }else if ratingInt! == 2  {
+            cell.ratingLabel!.textColor = UIColor.darkGray
             cell.ratingLabel!.shadowColor = UIColor.black
-        } else {
+        } else if ratingInt! == 3  {
+            cell.ratingLabel!.textColor = UIColor.brown
+            //cell.ratingLabel!.shadowColor = UIColor.black
+        } else if ratingInt! == 4  {
+            cell.ratingLabel!.textColor = UIColor.purple
+            //cell.ratingLabel!.shadowColor = UIColor.black
+        } else if ratingInt! == 5 {
             cell.ratingLabel!.textColor = UIColor.green
+        } else {
+            cell.ratingLabel!.textColor = UIColor.orange
         }
         
         if year == nil {
             cell.releaseYearLabel!.text = "Undeclared"
             cell.releaseYearLabel!.textColor = UIColor.darkGray
-        } else if year! >= 2010 {
+        } else if year! < 1989 {
+            cell.releaseYearLabel!.textColor = UIColor.darkGray
+            //cell.releaseYearLabel!.shadowColor = UIColor.black
+        } else if year! >= 1989 && year! < 1999 {
+            cell.releaseYearLabel!.textColor = UIColor.brown
+            //cell.releaseYearLabel!.shadowColor = UIColor.black
+        } else if year! >= 1999 && year! < 2010 {
+            cell.releaseYearLabel!.textColor = UIColor.purple
+            //cell.releaseYearLabel!.shadowColor = UIColor.black
+        } else if year! >= 2010 && year! < 2017 {
             cell.releaseYearLabel!.textColor = UIColor.green
             //cell.releaseYearLabel!.shadowColor = UIColor.black
         } else {

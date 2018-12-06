@@ -49,17 +49,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qRJ-6a-Cn6">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="book" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qRJ-6a-Cn6">
                                 <rect key="frame" x="67" y="209.5" width="240" height="240"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="240" id="TGQ-vT-KeS"/>
                                     <constraint firstAttribute="width" constant="240" id="mGr-lR-8Eg"/>
                                 </constraints>
                             </imageView>
-                            <button clipsSubviews="YES" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FHQ-oX-XID">
+                            <button clipsSubviews="YES" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenDisabled="NO" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="FHQ-oX-XID">
                                 <rect key="frame" x="162" y="457" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="camera.png"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="6"/>
+                                <state key="normal" title="Attach a picture" backgroundImage="camera.png">
+                                    <color key="titleColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="photoClick:" destination="CJD-GA-Unz" eventType="touchUpInside" id="6cz-wh-Keu"/>
                                 </connections>
@@ -200,7 +203,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="add" id="qEK-H7-hhu">
                             <connections>
-                                <action selector="addTeam:" destination="4Gf-Ig-FaX" id="Fbr-SB-VX8"/>
+                                <action selector="addBook:" destination="4Gf-Ig-FaX" id="duK-2w-9hx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -386,6 +389,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="book" width="500" height="500"/>
         <image name="camera.png" width="398" height="398"/>
     </resources>
 </document>

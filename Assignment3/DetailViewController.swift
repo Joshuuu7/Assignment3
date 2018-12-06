@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var books: [Book] = []
     var managedObjectContext: NSManagedObjectContext? = nil
     
@@ -20,6 +20,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var releaseYearLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var photoButton: UIButton!
+    
+    var imagePicker = UIImagePickerController()
     
     func configureView() {
         if let detail = detailItem {
@@ -44,7 +46,8 @@ class DetailViewController: UIViewController {
         }
     }
     @IBAction func photoClick(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "toPhotoViewController", sender: self)
+        //self.performSegue(withIdentifier: "toPhotoViewController", sender: self)
+        showAlert()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,7 +56,7 @@ class DetailViewController: UIViewController {
                 return
             }
         }*/
-        showAlert()
+        //showAlert()
     }
     
     func showAlert() {
@@ -76,17 +79,31 @@ class DetailViewController: UIViewController {
         if UIImagePickerController.isSourceTypeAvailable(sourceType) {
             
             let imagePickerController = UIImagePickerController()
-            //imagePickerController.delegate = self
+            imagePickerController.delegate = self
             imagePickerController.sourceType = sourceType
             self.present(imagePickerController, animated: true, completion: nil)
         }
+    }
+    
+    /*func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: NSDictionary!){
+        self.dismiss(animated: true, completion: { () -> Void in
+            
+        })
+        
+        imageView.image = image
+    }*/
+    
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        imageView.image = chosenImage
+        //self.performSegue(withIdentifier: "ShowEditView", sender: self)
+        dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         configureView()
-      
         view.endEditing(true)
     }
     
