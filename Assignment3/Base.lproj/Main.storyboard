@@ -32,13 +32,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating Label" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2c-Mm-QtW">
-                                <rect key="frame" x="0.0" y="152.5" width="80.5" height="17"/>
+                                <rect key="frame" x="0.0" y="152.5" width="150" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="ScP-PO-OEL"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Release Year Label" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Nh-69-b1j">
-                                <rect key="frame" x="253" y="152.5" width="122" height="17"/>
+                                <rect key="frame" x="225" y="152.5" width="150" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="kNN-OH-PLQ"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -61,7 +67,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="5Nh-69-b1j" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2U9-yr-4BT" secondAttribute="leading" constant="20" symbolic="YES" id="4By-SL-HPG"/>
+                            <constraint firstItem="5Nh-69-b1j" firstAttribute="leading" secondItem="F2c-Mm-QtW" secondAttribute="trailing" constant="75" id="1Vw-VH-gZb"/>
                             <constraint firstItem="F2c-Mm-QtW" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" id="4hS-m2-174"/>
                             <constraint firstItem="qRJ-6a-Cn6" firstAttribute="top" secondItem="F2c-Mm-QtW" secondAttribute="bottom" constant="40" id="9nx-xA-rM1"/>
                             <constraint firstItem="0ub-Sl-5LO" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" id="Ap0-ZL-tfx"/>
@@ -70,7 +76,6 @@
                             <constraint firstItem="fzR-OY-3GE" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" id="Qaf-mp-RVS"/>
                             <constraint firstItem="0ub-Sl-5LO" firstAttribute="top" secondItem="fzR-OY-3GE" secondAttribute="bottom" constant="10" id="ZKO-Ht-t9H"/>
                             <constraint firstItem="5Nh-69-b1j" firstAttribute="top" secondItem="0ub-Sl-5LO" secondAttribute="bottom" constant="20" id="bs8-VM-z02"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="F2c-Mm-QtW" secondAttribute="trailing" constant="20" symbolic="YES" id="btN-nq-lJ5"/>
                             <constraint firstItem="fzR-OY-3GE" firstAttribute="top" secondItem="0xC-hf-SN1" secondAttribute="top" constant="20" id="hEi-Lv-7hB"/>
                             <constraint firstItem="0xC-hf-SN1" firstAttribute="trailing" secondItem="0ub-Sl-5LO" secondAttribute="trailing" id="hpt-lI-sbd"/>
                             <constraint firstItem="qRJ-6a-Cn6" firstAttribute="centerX" secondItem="2U9-yr-4BT" secondAttribute="centerX" id="ydx-Yv-0Ge"/>

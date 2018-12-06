@@ -21,8 +21,6 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var photoButton: UIButton!
     
-    let image = UIImage(named: "camera.png")
-    
     func configureView() {
         if let detail = detailItem {
             if let label = titleLabel {
@@ -39,10 +37,10 @@ class DetailViewController: UIViewController {
                 label.textColor = UIColor.green
                 label.text = "Release year: " + detail.releaseYear!
             }
-            /*if let imageView = self.imageView {
-                //(image: UIImage?) in
-                imageView.image = image
-            }*/
+            if let imageView = self.imageView {
+                // (image: UIImage?) in
+                imageView.image = detail.image as? UIImage
+            }
         }
     }
     @IBAction func photoClick(_ sender: UIButton) {
@@ -88,7 +86,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         configureView()
-        photoButton.setImage(image, for: .normal)
+      
         view.endEditing(true)
     }
     
