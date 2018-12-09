@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import AudioToolbox
+import AVFoundation
 
 class TableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
@@ -132,6 +134,12 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             }*/
             if ( titleResults.count > 0 && authorResults.count > 0 ) {
         
+                
+                let systemSoundID: SystemSoundID = 1016
+                
+                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                AudioServicesPlaySystemSound (systemSoundID)
+                
                 let alert = UIAlertController(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.", preferredStyle: .alert)
                 
                 self.present(alert, animated: true, completion: nil)
