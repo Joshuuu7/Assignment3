@@ -60,7 +60,7 @@
                                 <rect key="frame" x="162" y="457" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="6"/>
-                                <state key="normal" title="Attach a picture" backgroundImage="camera.png">
+                                <state key="normal" backgroundImage="camera.png">
                                     <color key="titleColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>

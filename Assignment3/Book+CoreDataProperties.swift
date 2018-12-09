@@ -2,7 +2,7 @@
 //  Book+CoreDataProperties.swift
 //  Assignment3
 //
-//  Created by Joshua Aaron Flores Stavedahl on 10/27/18.
+//  Created by Joshua Aaron Flores Stavedahl on 12/6/18.
 //  Copyright © 2018 Northern Illinois University. All rights reserved.
 //
 //
@@ -17,10 +17,10 @@ extension Book {
         return NSFetchRequest<Book>(entityName: "Book")
     }
 
-    @NSManaged public var title: String?
     @NSManaged public var author: String?
+    @NSManaged public var image: NSData?
+    @NSManaged public var rating: String?
     @NSManaged public var releaseYear: String?
-    @NSManaged public var rating: Double
-    @NSManaged public var image: NSObject?
+    @NSManaged public var title: String?
 
 }

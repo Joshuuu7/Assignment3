@@ -23,6 +23,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     var imagePicker = UIImagePickerController()
     
+    
+    
     func configureView() {
         if let detail = detailItem {
             if let label = titleLabel {
@@ -34,14 +36,21 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             if let label = ratingLabel {
                 label.textColor = UIColor.green
                 label.text = "Rating: " + detail.rating! + " / 5"
+                label.halfTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                //label.halfTextColorChange(fullText: label.text!, changeText: " / 5")
             }
             if let label = releaseYearLabel {
                 label.textColor = UIColor.green
                 label.text = "Release year: " + detail.releaseYear!
+                label.halfTextColorChange(fullText: label.text!, changeText: "Release year: ")
             }
             if let imageView = self.imageView {
                 // (image: UIImage?) in
-                imageView.image = detail.image as? UIImage
+                if let image = detail.image {
+                    imageView.image = UIImage(data: image as Data)
+                } else {
+                    imageView.image = UIImage(named: "book")
+                }
             }
         }
     }
@@ -61,7 +70,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     func showAlert() {
         
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Attach a picture", message: "Choose a book cover", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
             self.getImage(fromSourceType: .camera)
         }))
@@ -97,6 +106,20 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         imageView.image = chosenImage
         //self.performSegue(withIdentifier: "ShowEditView", sender: self)
+        
+        detailItem!.image = UIImagePNGRepresentation(chosenImage)! as NSData
+        
+        // Write detailItem to the database
+        // Save the context.
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -119,4 +142,14 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     
+}
+
+extension UILabel {
+    func halfTextColorChange (fullText : String , changeText : String ) {
+        let strNumber: NSString = fullText as NSString
+        let range = (strNumber).range(of: changeText)
+        let attribute = NSMutableAttributedString.init(string: fullText)
+        attribute.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black , range: range)
+        self.attributedText = attribute
+    }
 }

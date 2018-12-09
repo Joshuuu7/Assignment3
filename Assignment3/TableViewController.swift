@@ -385,48 +385,61 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         
         cell.titleLabel!.text = book.title
         cell.authorLabel!.text = "Author: \(book.author!)"
-        cell.releaseYearLabel!.text = "Release Year: \(book.releaseYear!)"
+        cell.releaseYearLabel!.text = "Release Year: " + "\(book.releaseYear!)"
         cell.ratingLabel!.text = "Rating : \(ratingInt!) / 5"
         //cell.ratingLabel!.text = "Rating : \(String(describing: ratingInt)) / 5"
         
         if ratingInt == nil {
             cell.ratingLabel.text = "Rating : 0 / 5"
             cell.ratingLabel.textColor = UIColor.blue
+            cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 1 {
             cell.ratingLabel!.textColor = UIColor.red
             cell.ratingLabel!.shadowColor = UIColor.gray
+            cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         }else if ratingInt! == 2  {
             cell.ratingLabel!.textColor = UIColor.darkGray
             cell.ratingLabel!.shadowColor = UIColor.black
+            cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 3  {
             cell.ratingLabel!.textColor = UIColor.brown
             //cell.ratingLabel!.shadowColor = UIColor.black
+            cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 4  {
             cell.ratingLabel!.textColor = UIColor.purple
             //cell.ratingLabel!.shadowColor = UIColor.black
+            cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 5 {
             cell.ratingLabel!.textColor = UIColor.green
+            cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else {
             cell.ratingLabel!.textColor = UIColor.orange
+            cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         }
         
         if year == nil {
             cell.releaseYearLabel!.text = "Undeclared"
             cell.releaseYearLabel!.textColor = UIColor.darkGray
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
         } else if year! < 1989 {
             cell.releaseYearLabel!.textColor = UIColor.darkGray
             //cell.releaseYearLabel!.shadowColor = UIColor.black
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
         } else if year! >= 1989 && year! < 1999 {
             cell.releaseYearLabel!.textColor = UIColor.brown
             //cell.releaseYearLabel!.shadowColor = UIColor.black
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
         } else if year! >= 1999 && year! < 2010 {
             cell.releaseYearLabel!.textColor = UIColor.purple
             //cell.releaseYearLabel!.shadowColor = UIColor.black
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
         } else if year! >= 2010 && year! < 2017 {
             cell.releaseYearLabel!.textColor = UIColor.green
             //cell.releaseYearLabel!.shadowColor = UIColor.black
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
         } else {
             cell.releaseYearLabel!.textColor = UIColor.orange
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
         }
     }
     
@@ -501,6 +514,16 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
 extension TableViewController: FilterViewControllerDelegate {
     func filterViewController(filter: FilterViewController, didSelectPredicate predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?) {
         fetchAndReload(sort: [sortDescriptor!])
+    }
+}
+
+extension UILabel {
+    func someTextColorChange (fullText : String , changeText : String ) {
+        let strNumber: NSString = fullText as NSString
+        let range = (strNumber).range(of: changeText)
+        let attribute = NSMutableAttributedString.init(string: fullText)
+        attribute.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black , range: range)
+        self.attributedText = attribute
     }
 }
 
