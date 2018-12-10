@@ -386,53 +386,66 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         cell.titleLabel!.text = book.title
         cell.authorLabel!.text = "Author: \(book.author!)"
         cell.releaseYearLabel!.text = "Release Year: " + "\(year!)"
-        cell.ratingLabel!.text = "Rating : \(ratingInt!) / 5"
+        cell.ratingLabel!.text = "Rating: \(ratingInt!) / 5"
         //cell.ratingLabel!.text = "Rating : \(String(describing: ratingInt)) / 5"
         
         if ratingInt == nil {
-            cell.ratingLabel.text = "Rating : 0 / 5"
+            cell.ratingLabel.text = "Rating: 0 / 5"
             cell.ratingLabel.textColor = UIColor.blue
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 1 {
             cell.ratingLabel!.textColor = UIColor.red
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.shadowColor = UIColor.gray
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         }else if ratingInt! == 2  {
             cell.ratingLabel!.textColor = UIColor.darkGray
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.shadowColor = UIColor.black
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 3  {
             cell.ratingLabel!.textColor = UIColor.brown
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 4  {
             cell.ratingLabel!.textColor = UIColor.purple
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 5 {
             cell.ratingLabel!.textColor = UIColor.green
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else {
             cell.ratingLabel!.textColor = UIColor.orange
+            cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         }
         
         if year == nil {
             cell.releaseYearLabel!.text = "Undeclared"
             cell.releaseYearLabel!.textColor = UIColor.darkGray
+            cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! < 1989 {
             cell.releaseYearLabel!.textColor = UIColor.darkGray
+            cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! >= 1989 && year! < 1999 {
             cell.releaseYearLabel!.textColor = UIColor.brown
+            cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! >= 1999 && year! < 2010 {
             cell.releaseYearLabel!.textColor = UIColor.purple
+            cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! >= 2010 && year! < 2017 {
             cell.releaseYearLabel!.textColor = UIColor.green
+            cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else {
             cell.releaseYearLabel!.textColor = UIColor.orange
+            cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         }
     }
