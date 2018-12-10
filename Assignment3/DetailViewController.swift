@@ -88,7 +88,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 }
             }
             if let ratingImageStars = self.ratingImageStars {
-                    ratingImageStars.image = UIImage(named:"\(ratingInt!)Stars")
+                ratingImageStars.image = UIImage(named:"\(ratingInt!)Stars")
+                ratingImageStars.transform = CGAffineTransform(scaleX: -1, y: 1)
             }
         }
     }
