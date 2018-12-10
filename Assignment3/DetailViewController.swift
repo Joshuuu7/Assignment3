@@ -23,8 +23,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     var imagePicker = UIImagePickerController()
     
-    
-    
     func configureView() {
         
         if let detail = detailItem {
@@ -39,11 +37,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 label.text = "Rating: " + detail.rating! + " / 5"
                 if ratingInt! == 1 {
                     label.textColor = UIColor.red
-                    label.shadowColor = UIColor.gray
                     label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
-                }else if ratingInt! == 2  {
+                } else if ratingInt! == 2  {
                     label.textColor = UIColor.darkGray
-                    label.shadowColor = UIColor.black
                     label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
                 } else if ratingInt! == 3  {
                     label.textColor = UIColor.brown
@@ -58,7 +54,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                     label.textColor = UIColor.orange
                     label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
                 }
-    
             }
             if let label = releaseYearLabel {
                 let yearInt = Int(detail.releaseYear!)

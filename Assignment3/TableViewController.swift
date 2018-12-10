@@ -394,15 +394,15 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             cell.ratingLabel.textColor = UIColor.blue
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
+            cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "/ 5")
         } else if ratingInt! == 1 {
             cell.ratingLabel!.textColor = UIColor.red
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
-            cell.ratingLabel!.shadowColor = UIColor.gray
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
+            cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "/ 5")
         }else if ratingInt! == 2  {
             cell.ratingLabel!.textColor = UIColor.darkGray
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
-            cell.ratingLabel!.shadowColor = UIColor.black
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 3  {
             cell.ratingLabel!.textColor = UIColor.brown
