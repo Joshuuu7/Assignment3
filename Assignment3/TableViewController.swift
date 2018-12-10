@@ -57,7 +57,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     // MARK: - Actions
     
-    // Add a new team to the database
+    // Add a new book to the database
     @IBAction func addBook(_ sender: AnyObject) {
         
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
@@ -74,6 +74,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             textField.placeholder = "Book Title"
             textField.textAlignment = .center
             textField.keyboardType = .default
+            //textField.layer.borderColor = UIColor( red: 153/255, green: 153/255, blue:0/255, alpha: 1.0 ).cgColor
+            //textField.layer.borderWidth = 1
+            //textField.layer.cornerRadius = 5
         }
         
         alert.addTextField { textField in
@@ -133,7 +136,6 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 self.present(titleAlert, animated: true, completion: nil)
             }*/
             if ( titleResults.count > 0 && authorResults.count > 0 ) {
-        
                 
                 let systemSoundID: SystemSoundID = 1016
                 
@@ -149,8 +151,10 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 
             } /*else if ( ratingInt! > 5 ) {
                 
-            } else if ( yearInt! > 2019 ) {
-                
+            } else if ( yearInt! >= 2019 ) {
+                releaseYearTextField.layer.borderColor = UIColor.red as! CGColor
+                releaseYearTextField.layer.borderWidth = 1
+                releaseYearTextField.layer.cornerRadius = 5
             }*/ else {
             
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
@@ -286,42 +290,30 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             
             alert.addTextField { textField in
                 textField.text = book.title
+                textField.placeholder = "Title"
                 textField.textAlignment = .center
                 textField.keyboardType = .default
-                if ( textField.text == "")
-                {
-                    textField.placeholder = "Title"
-                }
             }
             
             alert.addTextField { textField in
                 textField.text = book.author
+                textField.placeholder = "Author"
                 textField.textAlignment = .center
                 textField.keyboardType = .default
-                if ( textField.text == "")
-                {
-                    textField.placeholder = "Author"
-                }
             }
             
             alert.addTextField { textField in
                 textField.text = book.releaseYear
+                textField.placeholder = "Release Year"
                 textField.textAlignment = .center
                 textField.keyboardType = .numberPad
-                if ( textField.text == "")
-                {
-                    textField.placeholder = "Release Year"
-                }
             }
             
             alert.addTextField { textField in
                 textField.text = book.rating
+                textField.placeholder = "Rating ( 1 - 5 )"
                 textField.textAlignment = .center
                 textField.keyboardType = .numberPad
-                if ( textField.text == "")
-                {
-                    textField.placeholder = "Rating"
-                }
             }
             
             let saveAction = UIAlertAction(title: "Save", style: .default) {
@@ -393,7 +385,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         
         cell.titleLabel!.text = book.title
         cell.authorLabel!.text = "Author: \(book.author!)"
-        cell.releaseYearLabel!.text = "Release Year: " + "\(book.releaseYear!)"
+        cell.releaseYearLabel!.text = "Release Year: " + "\(year!)"
         cell.ratingLabel!.text = "Rating : \(ratingInt!) / 5"
         //cell.ratingLabel!.text = "Rating : \(String(describing: ratingInt)) / 5"
         
@@ -411,11 +403,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 3  {
             cell.ratingLabel!.textColor = UIColor.brown
-            //cell.ratingLabel!.shadowColor = UIColor.black
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 4  {
             cell.ratingLabel!.textColor = UIColor.purple
-            //cell.ratingLabel!.shadowColor = UIColor.black
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
         } else if ratingInt! == 5 {
             cell.ratingLabel!.textColor = UIColor.green
@@ -428,26 +418,22 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         if year == nil {
             cell.releaseYearLabel!.text = "Undeclared"
             cell.releaseYearLabel!.textColor = UIColor.darkGray
-            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! < 1989 {
             cell.releaseYearLabel!.textColor = UIColor.darkGray
-            //cell.releaseYearLabel!.shadowColor = UIColor.black
-            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! >= 1989 && year! < 1999 {
             cell.releaseYearLabel!.textColor = UIColor.brown
-            //cell.releaseYearLabel!.shadowColor = UIColor.black
-            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! >= 1999 && year! < 2010 {
             cell.releaseYearLabel!.textColor = UIColor.purple
-            //cell.releaseYearLabel!.shadowColor = UIColor.black
-            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! >= 2010 && year! < 2017 {
             cell.releaseYearLabel!.textColor = UIColor.green
-            //cell.releaseYearLabel!.shadowColor = UIColor.black
-            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else {
             cell.releaseYearLabel!.textColor = UIColor.orange
-            cell.releaseYearLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Release Year: ")
+            cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         }
     }
     
