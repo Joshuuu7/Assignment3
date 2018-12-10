@@ -35,8 +35,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 label.text = detail.author
             }
             if let label = ratingLabel {
-                label.text = "Rating: " + detail.rating! + " / 5"
-                if ratingInt! == 1 {
+                label.text = "Rating: " // + detail.rating! + " / 5"
+                /*if ratingInt! == 1 {
                     label.textColor = UIColor.red
                     label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
                 } else if ratingInt! == 2  {
@@ -54,14 +54,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 } else {
                     label.textColor = UIColor.orange
                     label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
-                }
+                }*/
             }
             if let label = releaseYearLabel {
                 let yearInt = Int(detail.releaseYear!)
                 label.text = "Release Year: " + detail.releaseYear!
                 if yearInt! < 1989 {
                     label.textColor = UIColor.darkGray
-                    label.shadowColor = UIColor.black
                     label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
                 } else if yearInt! >= 1989 && yearInt! < 1999  {
                     label.textColor = UIColor.brown
