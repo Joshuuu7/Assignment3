@@ -295,6 +295,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        var ratingInt: Int?
+        var yearInt: Int?
+        
         let editOrViewAlert = UIAlertController(title: "Choose an option", message: "Edit or View Book Details?", preferredStyle: .alert)
         
         let viewAction = UIAlertAction(title: "View", style: .default) {
@@ -345,11 +348,36 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2], let ratingTextField = alert.textFields?[3] else {
                     return
                 }
-
-                if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! && book.rating! == ratingTextField.text! ) ) )
-                {
+                ratingInt = Int("\(ratingTextField.text!)")
+                yearInt = Int("\(releaseYearTextField.text!)")
+                
+                if ( tableView.cellForRow(at: indexPath)?.isSelected == true && ( ( book.title! == titleTextField.text!   &&  book.author! == authorTextField.text! && book.releaseYear! == releaseYearTextField.text! && book.rating! == ratingTextField.text! ) ) ) {
                     print("Row is identical, no update needed.")
+                    
+                } else if ( titleTextField.text == nil || titleTextField.text == "" || authorTextField.text == nil || authorTextField.text == "" || ( ( titleTextField.text == nil || titleTextField.text == "" ) && ( authorTextField.text ==  nil || authorTextField.text ==  "" ) ) ) {
+                    
+                    self.errorSoundVibrate()
+                    self.showAlertWithoutButton(title: "Enter a book or author!", message: "\n The book and author fields can not be empty.")
+                } else if ( ratingInt == nil || ratingTextField.text == "" ) {
+                    ratingInt = 1
+                    
+                    self.errorSoundVibrate()
+                    self.showAlertWithoutButton(title: "NULL Rating!", message: "\n Rating must be a number between one and five.")
+                }
+                else if ( ratingInt! < 1 || ratingInt! > 5 ) {
+                    
+                    self.errorSoundVibrate()
+                    self.showAlertWithoutButton(title: "Incorrect rating!", message: "\n Rating must be a number between one and five.")
+                } else if ( yearInt == nil) {
+                    
+                    yearInt = 0
+                    
+                } else if ( yearInt! >= 2019 ) {
+                    
+                    self.errorSoundVibrate()
+                    self.showAlertWithoutButton(title: "Incorrect year!", message: "\n Impossible to add a year that does not yet exist.")
                 } else {
+                    
                     
                     book.title! = titleTextField.text!
                     book.author! = authorTextField.text!
