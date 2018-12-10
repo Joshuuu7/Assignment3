@@ -36,6 +36,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             }
             if let label = ratingLabel {
                 label.text = "Rating: " // + detail.rating! + " / 5"
+                
+                //Comment this code out if the starts are not going to be used and remove the stars ImageView in the storyboard.
+                
                 /*if ratingInt! == 1 {
                     label.textColor = UIColor.red
                     label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
