@@ -20,12 +20,14 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBOutlet weak var releaseYearLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var photoButton: UIButton!
+    @IBOutlet weak var ratingImageStars: UIImageView!
     
     var imagePicker = UIImagePickerController()
     
     func configureView() {
         
         if let detail = detailItem {
+            let ratingInt = Int(detail.rating!)
             if let label = titleLabel {
                 label.text = detail.title
             }
@@ -33,7 +35,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 label.text = detail.author
             }
             if let label = ratingLabel {
-                let ratingInt = Int(detail.rating!)
                 label.text = "Rating: " + detail.rating! + " / 5"
                 if ratingInt! == 1 {
                     label.textColor = UIColor.red
@@ -84,6 +85,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                     imageView.image = UIImage(named: "book")
                 }
             }
+            if let ratingImageStars = self.ratingImageStars {
+                    ratingImageStars.image = UIImage(named:"\(ratingInt!)Stars")
+            }
         }
     }
     @IBAction func photoClick(_ sender: UIButton) {
@@ -93,10 +97,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         /*if segue.identifier == "toPhotoViewController" {
-            guard segue.destination is AttachPhotoViewController else {
-                return
-            }
-        }*/
+         guard segue.destination is AttachPhotoViewController else {
+         return
+         }
+         }*/
         //showAlert()
     }
     
@@ -126,13 +130,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     
+    func image(forRating rating: Int) -> UIImage? {
+        let imageName = "\(rating)Stars"
+        return UIImage(named: imageName)
+    }
+    
     /*func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: NSDictionary!){
-        self.dismiss(animated: true, completion: { () -> Void in
-            
-        })
-        
-        imageView.image = image
-    }*/
+     self.dismiss(animated: true, completion: { () -> Void in
+     
+     })
+     
+     imageView.image = image
+     }*/
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage

@@ -67,6 +67,10 @@
                                     <action selector="photoClick:" destination="CJD-GA-Unz" eventType="touchUpInside" id="6cz-wh-Keu"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bAm-BA-16M">
+                                <rect key="frame" x="67" y="515" width="240" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -90,6 +94,7 @@
                         <outlet property="authorLabel" destination="0ub-Sl-5LO" id="C7b-Bh-plZ"/>
                         <outlet property="imageView" destination="qRJ-6a-Cn6" id="jtO-7o-2ok"/>
                         <outlet property="photoButton" destination="FHQ-oX-XID" id="VrT-p1-ddZ"/>
+                        <outlet property="ratingImageStars" destination="bAm-BA-16M" id="N6h-Rs-eag"/>
                         <outlet property="ratingLabel" destination="F2c-Mm-QtW" id="T0U-Ad-dKX"/>
                         <outlet property="releaseYearLabel" destination="5Nh-69-b1j" id="j6s-0a-hpG"/>
                         <outlet property="titleLabel" destination="fzR-OY-3GE" id="wKl-un-Sft"/>
