@@ -163,7 +163,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             let nserror = error as NSError
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
-        
         dismiss(animated: true, completion: nil)
     }
     
@@ -185,7 +184,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             configureView()
         }
     }
-    
 }
 
 extension UILabel {

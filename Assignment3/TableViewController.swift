@@ -47,6 +47,22 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     // MARK: - UIResponder methods
     
+    func errorSoundVibrate() {
+        let systemSoundID: SystemSoundID = 1053
+        
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        AudioServicesPlaySystemSound (systemSoundID)
+    }
+    
+    func showAlertWithoutButton(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
+            alert.dismiss(animated: true, completion: nil)
+        })
+    }
+    
     // Enable add button in response to shake gesture
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         
@@ -104,8 +120,8 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 return
             }
             
-            ratingInt = Int("\(ratingTextField)")
-            yearInt = Int("\(releaseYearTextField)")
+            ratingInt = Int("\(ratingTextField.text!)")
+            yearInt = Int("\(releaseYearTextField.text!)")
             
             //Check whether the book title or author exist in the database.
             fetchRequest.predicate = NSPredicate(format: "title == %@", titleTextField.text!)
@@ -135,27 +151,33 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 titleAlert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(titleAlert, animated: true, completion: nil)
             }*/
-            if ( titleResults.count > 0 && authorResults.count > 0 ) {
+            if ( titleTextField.text == nil || titleTextField.text == "" || authorTextField.text == nil || authorTextField.text == "" || ( ( titleTextField.text == nil || titleTextField.text == "" ) && ( authorTextField.text ==  nil || authorTextField.text ==  "" ) ) ) {
+            
+                self.errorSoundVibrate()
+                self.showAlertWithoutButton(title: "Enter a book or author!", message: "\n The book and author fields must be filled.")
+            }
+            else if ( titleResults.count > 0 && authorResults.count > 0 ) {
                 
-                let systemSoundID: SystemSoundID = 1016
+                self.errorSoundVibrate()
+                self.showAlertWithoutButton(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.")
+            } else if ( ratingInt == nil ) {
+                ratingInt = 1
                 
-                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-                AudioServicesPlaySystemSound (systemSoundID)
+                self.errorSoundVibrate()
+                self.showAlertWithoutButton(title: "NULL Rating!", message: "\n Rating must be a number between one and five.")
+            }
+            else if ( ratingInt! < 1 || ratingInt! > 5 ) {
                 
-                let alert = UIAlertController(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.", preferredStyle: .alert)
-                
-                self.present(alert, animated: true, completion: nil)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: {
-                    alert.dismiss(animated: true, completion: nil)
-                })
-                
-            } /*else if ( ratingInt! > 5 ) {
-                
+                self.errorSoundVibrate()
+                self.showAlertWithoutButton(title: "Incorrect rating!", message: "\n Rating must be a number between one and five.")
             } else if ( yearInt! >= 2019 ) {
-                releaseYearTextField.layer.borderColor = UIColor.red as! CGColor
+
+                self.errorSoundVibrate()
+                self.showAlertWithoutButton(title: "Incorrect year!", message: "\n Impossible to add a year that does not yet exist.")
+                /*releaseYearTextField.layer.borderColor = UIColor.red as! CGColor
                 releaseYearTextField.layer.borderWidth = 1
-                releaseYearTextField.layer.cornerRadius = 5
-            }*/ else {
+                releaseYearTextField.layer.cornerRadius = 5*/
+            } else {
             
             self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
             self.tableView.reloadData()
@@ -165,6 +187,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         alert.addAction(UIAlertAction(title: "Cancel", style: .default))
         alert.addAction(saveAction)
         present(alert, animated: true)
+    
     }
 
     
@@ -375,7 +398,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         var year: Int?
         
         if book.rating == nil {
-            book.rating = "0"
+            book.rating = "1"
             ratingInt = Int(book.rating!)!
             //book.image = 0 as NSObject
         }
@@ -390,7 +413,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         //cell.ratingLabel!.text = "Rating : \(String(describing: ratingInt)) / 5"
         
         if ratingInt == nil {
-            cell.ratingLabel.text = "Rating: 0 / 5"
+            cell.ratingLabel.text = "Rating: 1 / 5"
             cell.ratingLabel.textColor = UIColor.blue
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
