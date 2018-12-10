@@ -26,6 +26,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     
     func configureView() {
+        
         if let detail = detailItem {
             if let label = titleLabel {
                 label.text = detail.title
@@ -34,15 +35,51 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 label.text = detail.author
             }
             if let label = ratingLabel {
-                label.textColor = UIColor.green
+                let ratingInt = Int(detail.rating!)
                 label.text = "Rating: " + detail.rating! + " / 5"
-                label.halfTextColorChange(fullText: label.text!, changeText: "Rating: ")
-                //label.halfTextColorChange(fullText: label.text!, changeText: " / 5")
+                if ratingInt! == 1 {
+                    label.textColor = UIColor.red
+                    label.shadowColor = UIColor.gray
+                    label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                }else if ratingInt! == 2  {
+                    label.textColor = UIColor.darkGray
+                    label.shadowColor = UIColor.black
+                    label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                } else if ratingInt! == 3  {
+                    label.textColor = UIColor.brown
+                    label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                } else if ratingInt! == 4  {
+                    label.textColor = UIColor.purple
+                    label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                } else if ratingInt! == 5 {
+                    label.textColor = UIColor.green
+                    label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                } else {
+                    label.textColor = UIColor.orange
+                    label.someTextColorChange(fullText: label.text!, changeText: "Rating: ")
+                }
+    
             }
             if let label = releaseYearLabel {
-                label.textColor = UIColor.green
-                label.text = "Release year: " + detail.releaseYear!
-                label.halfTextColorChange(fullText: label.text!, changeText: "Release year: ")
+                let yearInt = Int(detail.releaseYear!)
+                label.text = "Release Year: " + detail.releaseYear!
+                if yearInt! < 1989 {
+                    label.textColor = UIColor.darkGray
+                    label.shadowColor = UIColor.black
+                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                } else if yearInt! >= 1989 && yearInt! < 1999  {
+                    label.textColor = UIColor.brown
+                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                } else if yearInt! >= 1999 && yearInt! < 2010 {
+                    label.textColor = UIColor.purple
+                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                } else if yearInt! >= 2010 && yearInt! < 2017 {
+                    label.textColor = UIColor.green
+                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                } else {
+                    label.textColor = UIColor.orange
+                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                }
             }
             if let imageView = self.imageView {
                 // (image: UIImage?) in

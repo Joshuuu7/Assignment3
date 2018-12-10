@@ -424,7 +424,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         
         if year == nil {
             cell.releaseYearLabel!.text = "Undeclared"
-            cell.releaseYearLabel!.textColor = UIColor.darkGray
+            cell.releaseYearLabel!.textColor = UIColor.red
             cell.releaseYearLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.releaseYearLabel!.someTextColorChange(fullText: cell.releaseYearLabel.text!, changeText: "Release Year: ")
         } else if year! < 1989 {
