@@ -83,8 +83,14 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 // (image: UIImage?) in
                 if let image = detail.image {
                     imageView.image = UIImage(data: image as Data)
+                    imageView.layer.masksToBounds = true
+                    imageView.layer.borderWidth = 2
+                    imageView.layer.borderColor = UIColor.lightGray.cgColor
                 } else {
                     imageView.image = UIImage(named: "book")
+                    imageView.layer.masksToBounds = true
+                    imageView.layer.borderWidth = 2
+                    imageView.layer.borderColor = UIColor.lightGray.cgColor
                 }
             }
             if let ratingImageStars = self.ratingImageStars {

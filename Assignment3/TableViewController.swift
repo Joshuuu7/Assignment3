@@ -154,7 +154,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             if ( titleTextField.text == nil || titleTextField.text == "" || authorTextField.text == nil || authorTextField.text == "" || ( ( titleTextField.text == nil || titleTextField.text == "" ) && ( authorTextField.text ==  nil || authorTextField.text ==  "" ) ) ) {
             
                 self.errorSoundVibrate()
-                self.showAlertWithoutButton(title: "Enter a book or author!", message: "\n The book and author fields must be filled.")
+                self.showAlertWithoutButton(title: "Enter a Book or Author!", message: "\n The book and author fields must be filled.")
             }
             else if ( titleResults.count > 0 && authorResults.count > 0 ) {
                 
@@ -169,11 +169,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             else if ( ratingInt! < 1 || ratingInt! > 5 ) {
                 
                 self.errorSoundVibrate()
-                self.showAlertWithoutButton(title: "Incorrect rating!", message: "\n Rating must be a number between one and five.")
+                self.showAlertWithoutButton(title: "Incorrect Rating!", message: "\n Rating must be a number between one and five.")
             } else if ( yearInt! >= 2019 ) {
 
                 self.errorSoundVibrate()
-                self.showAlertWithoutButton(title: "Incorrect year!", message: "\n Impossible to add a year that does not yet exist.")
+                self.showAlertWithoutButton(title: "Incorrect Year!", message: "\n Impossible to add a year that does not yet exist.")
                 /*releaseYearTextField.layer.borderColor = UIColor.red as! CGColor
                 releaseYearTextField.layer.borderWidth = 1
                 releaseYearTextField.layer.cornerRadius = 5*/
@@ -357,7 +357,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 } else if ( titleTextField.text == nil || titleTextField.text == "" || authorTextField.text == nil || authorTextField.text == "" || ( ( titleTextField.text == nil || titleTextField.text == "" ) && ( authorTextField.text ==  nil || authorTextField.text ==  "" ) ) ) {
                     
                     self.errorSoundVibrate()
-                    self.showAlertWithoutButton(title: "Enter a book or author!", message: "\n The book and author fields can not be empty.")
+                    self.showAlertWithoutButton(title: "Enter a Book or Author!", message: "\n The book and author fields can not be empty.")
                 } else if ( ratingInt == nil || ratingTextField.text == "" ) {
                     ratingInt = 1
                     
@@ -367,7 +367,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 else if ( ratingInt! < 1 || ratingInt! > 5 ) {
                     
                     self.errorSoundVibrate()
-                    self.showAlertWithoutButton(title: "Incorrect rating!", message: "\n Rating must be a number between one and five.")
+                    self.showAlertWithoutButton(title: "Incorrect Rating!", message: "\n Rating must be a number between one and five.")
                 } else if ( yearInt == nil) {
                     
                     yearInt = 0
@@ -375,7 +375,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 } else if ( yearInt! >= 2019 ) {
                     
                     self.errorSoundVibrate()
-                    self.showAlertWithoutButton(title: "Incorrect year!", message: "\n Impossible to add a year that does not yet exist.")
+                    self.showAlertWithoutButton(title: "Incorrect Year!", message: "\n Impossible to add a year that does not yet exist.")
                 } else {
                     
                     
@@ -445,12 +445,10 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             cell.ratingLabel.textColor = UIColor.blue
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
-            cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "/ 5")
         } else if ratingInt! == 1 {
             cell.ratingLabel!.textColor = UIColor.red
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
             cell.ratingLabel!.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "Rating: ")
-            cell.ratingLabel.someTextColorChange(fullText: cell.ratingLabel.text!, changeText: "/ 5")
         }else if ratingInt! == 2  {
             cell.ratingLabel!.textColor = UIColor.darkGray
             cell.ratingLabel!.font = UIFont.boldSystemFont(ofSize: 8)
