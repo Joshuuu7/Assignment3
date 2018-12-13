@@ -403,7 +403,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                     context?.insert(self.fetchedResultsController.object(at: indexPath))
                     
                     do {
-                        print("Row is DIFFERENT, updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!)")
+                        print("Row is DIFFERENT, updated with Title: \(titleTextField.text!), Author: \(authorTextField.text!), Release: \(releaseYearTextField.text!), Rating: \(ratingTextField.text!)")
                         try context?.save()
                         tableView.reloadRows(at: [indexPath], with: .top)
                         tableView.reloadData()

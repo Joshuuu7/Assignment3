@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		42129ACA21B9995900F27152 /* Book+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42129AC821B9995900F27152 /* Book+CoreDataClass.swift */; };
 		42129ACB21B9995900F27152 /* Book+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42129AC921B9995900F27152 /* Book+CoreDataProperties.swift */; };
+		42129ACD21C211F900F27152 /* BookAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42129ACC21C211F900F27152 /* BookAnnotation.swift */; };
 		4267C58321B8A07500561B54 /* FindBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4267C58221B8A07500561B54 /* FindBookViewController.swift */; };
 		426C789A2176F3CF00808A80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426C78992176F3CF00808A80 /* AppDelegate.swift */; };
 		426C789C2176F3CF00808A80 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426C789B2176F3CF00808A80 /* TableViewController.swift */; };
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		42129AC821B9995900F27152 /* Book+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Book+CoreDataClass.swift"; sourceTree = "<group>"; };
 		42129AC921B9995900F27152 /* Book+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Book+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		42129ACC21C211F900F27152 /* BookAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookAnnotation.swift; sourceTree = "<group>"; };
 		4267C58221B8A07500561B54 /* FindBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindBookViewController.swift; sourceTree = "<group>"; };
 		426C78962176F3CF00808A80 /* Assignment3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		426C78992176F3CF00808A80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				4267C58221B8A07500561B54 /* FindBookViewController.swift */,
 				426C78B821783F3900808A80 /* FilterViewController.swift */,
 				426C78AE2176FC8A00808A80 /* CoreDataStack.swift */,
+				42129ACC21C211F900F27152 /* BookAnnotation.swift */,
 				42129AC821B9995900F27152 /* Book+CoreDataClass.swift */,
 				42129AC921B9995900F27152 /* Book+CoreDataProperties.swift */,
 				426C789D2176F3D000808A80 /* Main.storyboard */,
@@ -163,6 +166,7 @@
 				42129ACA21B9995900F27152 /* Book+CoreDataClass.swift in Sources */,
 				426C789C2176F3CF00808A80 /* TableViewController.swift in Sources */,
 				426C78B921783F3900808A80 /* FilterViewController.swift in Sources */,
+				42129ACD21C211F900F27152 /* BookAnnotation.swift in Sources */,
 				4267C58321B8A07500561B54 /* FindBookViewController.swift in Sources */,
 				426C789A2176F3CF00808A80 /* AppDelegate.swift in Sources */,
 				426C78AF2176FC8A00808A80 /* CoreDataStack.swift in Sources */,
