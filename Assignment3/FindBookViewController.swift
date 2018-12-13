@@ -21,18 +21,16 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
     let locationManager = CLLocationManager()
     let deKalb = ", DeKalb, IL, 60115"
 
+    lazy var holmesStudentCenter = "340 Carroll Ave" + deKalb
+    lazy var classicBooks = "115 N 1st St" + deKalb
+    lazy var villageComons = "901 Lucinda Ave k" + deKalb
+    lazy var dekalbPublicLibrary = "309 Oak St" + deKalb
+    lazy var foundersMemorialLibrary = "217 Normal Rd" + deKalb
+    lazy var davidCShapiroLibrary = "Swen Parson Hall, Northern Illinois University" + deKalb
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        let addressString = "855 Regent Dr" + deKalb
-        let holmesStudentCenter = "340 Carroll Ave" + deKalb
-        let classicBooks = "115 N 1st St" + deKalb
-        let villageComons = "901 Lucinda Ave k" + deKalb
-        let dekalbPublicLibrary = "309 Oak St" + deKalb
-        let foundersMemorialLibrary = "217 Normal Rd" + deKalb
-        let davidCShapiroLibrary = "Swen Parson Hall, Northern Illinois University" + deKalb
         
         locationManager.delegate = self
         bookMapView.delegate = self
@@ -92,12 +90,6 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
     
     private func reverseGeocode( address: String ) {
         let geoCoder = CLGeocoder()
-        let holmesStudentCenter = "340 Carroll Ave" + deKalb
-        let classicBooks = "115 N 1st St" + deKalb
-        let villageComons = "901 Lucinda Ave k" + deKalb
-        let dekalbPublicLibrary = "309 Oak St" + deKalb
-        let foundersMemorialLibrary = "217 Normal Rd" + deKalb
-        let davidCShapiroLibrary = "Swen Parson Hall, Northern Illinois University" + deKalb
         
         var addressChange = address
         
@@ -113,17 +105,17 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
                 return
             }
             
-            if ( address ==  holmesStudentCenter) {
+            if ( address ==  self.holmesStudentCenter) {
                 addressChange = "Holmes Student Center Book Store"
-            } else if ( address == classicBooks ) {
+            } else if ( address == self.classicBooks ) {
                 addressChange = "Classic Books"
-            } else if ( address == villageComons) {
+            } else if ( address == self.villageComons) {
                 addressChange = "Village Commons Book Store"
-            } else if ( address == dekalbPublicLibrary ) {
+            } else if ( address == self.dekalbPublicLibrary ) {
                 addressChange = "Dekalb Public Library"
-            } else if ( address == foundersMemorialLibrary ) {
+            } else if ( address == self.foundersMemorialLibrary ) {
                 addressChange = "Founders Memorial Library"
-            } else if ( address == davidCShapiroLibrary ) {
+            } else if ( address == self.davidCShapiroLibrary ) {
                 addressChange = "David C. Shapiro Library"
             }
             
