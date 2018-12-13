@@ -434,7 +434,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         guard let cell = cell as? BookCell else {
             return
         }
-        
+    
         var ratingInt: Int?
         var year: Int?
         
@@ -588,6 +588,16 @@ extension TableViewController: FilterViewControllerDelegate {
 
 extension UILabel {
     func someTextColorChange (fullText : String , changeText : String ) {
+        let strNumber: NSString = fullText as NSString
+        let range = (strNumber).range(of: changeText)
+        let attribute = NSMutableAttributedString.init(string: fullText)
+        attribute.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black , range: range)
+        self.attributedText = attribute
+    }
+}
+
+extension UILabel {
+    func someSubTextColorChange (fullText : String , changeText : String ) {
         let strNumber: NSString = fullText as NSString
         let range = (strNumber).range(of: changeText)
         let attribute = NSMutableAttributedString.init(string: fullText)
