@@ -8,11 +8,8 @@
 
 import Foundation
 import UIKit
-import MobileCoreServices
-import AVFoundation
-import Photos
 
-class AttachPhotoViewController: UIViewController {
+class FindBookViewController: UIViewController {
     
     
 }

@@ -119,17 +119,17 @@
                         <outlet property="ratingLabel" destination="F2c-Mm-QtW" id="T0U-Ad-dKX"/>
                         <outlet property="releaseYearLabel" destination="5Nh-69-b1j" id="j6s-0a-hpG"/>
                         <outlet property="titleLabel" destination="fzR-OY-3GE" id="wKl-un-Sft"/>
-                        <segue destination="pKJ-Zf-Y1a" kind="show" identifier="toPhotoViewController" id="Gx4-ug-vyU"/>
+                        <segue destination="pKJ-Zf-Y1a" kind="show" identifier="toFindBookViewController" id="Gx4-ug-vyU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fms-JV-7x6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="284" y="-685.00749625187416"/>
         </scene>
-        <!--Attach Photo View Controller-->
+        <!--Find Book View Controller-->
         <scene sceneID="iaE-FL-vHx">
             <objects>
-                <viewController id="pKJ-Zf-Y1a" customClass="AttachPhotoViewController" customModule="Assignment3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="pKJ-Zf-Y1a" customClass="FindBookViewController" customModule="Assignment3" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2JA-my-8x4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

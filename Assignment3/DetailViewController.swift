@@ -108,13 +108,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     @IBAction func findBookClick(_ sender: UIButton) {
-        performSegue(withIdentifier: "toPhotoViewController", sender: findBookButton )
+        performSegue(withIdentifier: "toFindBookViewController", sender: findBookButton )
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toPhotoViewController" {
-            guard segue.destination is AttachPhotoViewController else {
+        if segue.identifier == "toFindBookViewController" {
+            guard segue.destination is FindBookViewController else {
                 return
             }
         }
