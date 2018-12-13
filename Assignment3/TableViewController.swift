@@ -15,6 +15,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     var managedObjectContext: NSManagedObjectContext? = nil
     var fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
+    
     var coreDataStack: CoreDataStack!
     var books: [Book] = []
     var fetchedResultsController: NSFetchedResultsController<Book>!
@@ -32,7 +33,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         //let sortDescriptor: NSSortDescriptor?
         //if let sr = sortDescriptor {
-            //fetchRequest.sortDescriptors = [sortDescriptor]
+        //fetchRequest.sortDescriptors = [sortDescriptor]
         //}
         //var sr = [NSSortDescriptor]()
         //sr.append(sortDescriptor)
@@ -76,8 +77,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     // Add a new book to the database
     @IBAction func addBook(_ sender: AnyObject) {
         
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
-        //fetchRequest.predicate = NSPredicate(format: "title = %@", title)
+        let titleFetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
+        let authorFetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Book")
+        
         var titleResults: [NSManagedObject] = []
         var authorResults: [NSManagedObject] = []
         var ratingInt: Int?
@@ -119,77 +121,81 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
             guard let titleTextField = alert.textFields?[0], let authorTextField = alert.textFields?[1], let releaseYearTextField = alert.textFields?[2], let ratingTextField = alert.textFields?[3] else {
                 return
             }
+        
+            //Check whether the book title or author exist in the database.
+            titleFetchRequest.predicate = NSPredicate(format: "title == %@", titleTextField.text!)
+            authorFetchRequest.predicate = NSPredicate(format: "author == %@", authorTextField.text!)
             
             ratingInt = Int("\(ratingTextField.text!)")
             yearInt = Int("\(releaseYearTextField.text!)")
             
-            //Check whether the book title or author exist in the database.
-            fetchRequest.predicate = NSPredicate(format: "title == %@", titleTextField.text!)
-            fetchRequest.predicate = NSPredicate(format: "author == %@", authorTextField.text!)
             
             do {
-                titleResults = (try self.managedObjectContext?.fetch(fetchRequest))!
+                titleResults = (try self.managedObjectContext?.fetch(titleFetchRequest))!
             }
             catch {
                 print("Error executing Title fetch request: \(error)")
             }
             do {
-                authorResults = (try self.managedObjectContext?.fetch(fetchRequest))!
+                authorResults = (try self.managedObjectContext?.fetch(authorFetchRequest))!
             }
             catch {
                 print("Error executing Author fetch request: \(error)")
             }
-        
+            
             // If the book and author exists as a record display an error alert. Reason: There could be
             // several books with the same name, there are also authors of many books, only in this specific
             // case would this be relevant.
-            /*if ( titleResults.count > 0  ) {
-                
-                print("Executed title condition only")
-                
-                let titleAlert = UIAlertController(title: "Book already exists?", message: "\n If this is a book written by a different author with the same name add it, otherwise lease edit a current book.", preferredStyle: .alert)
-                titleAlert.addAction(UIAlertAction(title: "OK", style: .default))
-                self.present(titleAlert, animated: true, completion: nil)
-            }*/
+            /*if ( titleResults.count > 0 && authorResults.count <= 0 ) {
+             
+             print("Executed title condition only")
+             
+             let titleAlert = UIAlertController(title: "Book already exists?", message: "\n If this is a book written by a different author with the same name add it, otherwise lease edit a current book.", preferredStyle: .alert)
+             titleAlert.addAction(UIAlertAction(title: "OK", style: .default))
+             self.present(titleAlert, animated: true, completion: nil)
+             }*/
+            // Check if title or author textfield are empty.
             if ( titleTextField.text == nil || titleTextField.text == "" || authorTextField.text == nil || authorTextField.text == "" || ( ( titleTextField.text == nil || titleTextField.text == "" ) && ( authorTextField.text ==  nil || authorTextField.text ==  "" ) ) ) {
-            
+                
                 self.errorSoundVibrate()
                 self.showAlertWithoutButton(title: "Enter a Book or Author!", message: "\n The book and author fields must be filled.")
-            }
-            else if ( titleResults.count > 0 && authorResults.count > 0 ) {
+                //Check if title and author fields are already stored (basically if the same book is already stored).
+            } else if ( titleResults.count > 0 &&  authorResults.count > 0  ) {
                 
                 self.errorSoundVibrate()
                 self.showAlertWithoutButton(title: "Book already exists!", message: "\n Try adding a different book or edit the current one to update it.")
+                //Check if rating is nil.
             } else if ( ratingInt == nil ) {
                 ratingInt = 1
                 
                 self.errorSoundVibrate()
                 self.showAlertWithoutButton(title: "NULL Rating!", message: "\n Rating must be a number between one and five.")
-            }
-            else if ( ratingInt! < 1 || ratingInt! > 5 ) {
+                // Check if rating is between one and five.
+            } else if ( ratingInt! < 1 || ratingInt! > 5 ) {
                 
                 self.errorSoundVibrate()
                 self.showAlertWithoutButton(title: "Incorrect Rating!", message: "\n Rating must be a number between one and five.")
+                // Check if year is more than current year.
             } else if ( yearInt! >= 2019 ) {
-
+                
                 self.errorSoundVibrate()
                 self.showAlertWithoutButton(title: "Incorrect Year!", message: "\n Impossible to add a year that does not yet exist.")
                 /*releaseYearTextField.layer.borderColor = UIColor.red as! CGColor
-                releaseYearTextField.layer.borderWidth = 1
-                releaseYearTextField.layer.cornerRadius = 5*/
+                 releaseYearTextField.layer.borderWidth = 1
+                 releaseYearTextField.layer.cornerRadius = 5*/
+                //Add book to storage.
             } else {
-            
-            self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
-            self.tableView.reloadData()
+                self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
+                self.tableView.reloadData()
             }
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .default))
         alert.addAction(saveAction)
         present(alert, animated: true)
-    
+        
     }
-
+    
     
     func save(title: String, author: String, releaseYear: String, rating: String) {
         let context = self.managedObjectContext
@@ -228,7 +234,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 controller.managedObjectContext = managedObjectContext
                 filterViewCcontroller.fetchedResultsController = fetchedResultsController
                 filterViewCcontroller.delegate = self
-                    //controller.navigationItem.leftItemsSupplementBackButton = true
+                //controller.navigationItem.leftItemsSupplementBackButton = true
             }
         } else if segue.identifier == "toDetailViewController" {
             guard let detailViewController = segue.destination as? DetailViewController else {
@@ -254,16 +260,16 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
     
     
     /*override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        let sectionInfo = fetchedResultsController.sections?[section]
-        return sectionInfo?.name
-    }*/
+     
+     let sectionInfo = fetchedResultsController.sections?[section]
+     return sectionInfo?.name
+     }*/
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
- 
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> BookCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookInfoCell", for: indexPath)
