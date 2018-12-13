@@ -105,7 +105,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     @IBAction func photoClick(_ sender: UIButton) {
-        //self.performSegue(withIdentifier: "toPhotoViewController", sender: self)
         showAlert()
     }
     
@@ -113,13 +112,15 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         performSegue(withIdentifier: "toFindBookViewController", sender: findBookButton )
     }
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toFindBookViewController" {
-            guard segue.destination is FindBookViewController else {
-                return
-            }
+        guard let findBookController = segue.destination as? FindBookViewController else {
+            return
         }
+        
+        findBookController.books = books
+        findBookController.managedObjectContext = managedObjectContext
+        //findBookController.delegate = self
+        
         //showAlert()
     }
     
