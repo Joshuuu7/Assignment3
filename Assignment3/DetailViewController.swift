@@ -26,6 +26,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBOutlet weak var findBookButton: UIButton!
     
     var imagePicker = UIImagePickerController()
+    let releaserYearText = "Release Year: "
+    let ratingText = "Rating: "
     
     func configureView() {
         
@@ -38,7 +40,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 label.text = detail.author
             }
             if let label = ratingLabel {
-                label.text = "Rating: " // + detail.rating! + " / 5"
+                label.text = ratingText // + detail.rating! + " / 5"
                 
                 //Comment this code out if the starts are not going to be used and remove the stars ImageView in the storyboard.
                 
@@ -64,22 +66,22 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             }
             if let label = releaseYearLabel {
                 let yearInt = Int(detail.releaseYear!)
-                label.text = "Release Year: " + detail.releaseYear!
+                label.text = releaserYearText + detail.releaseYear!
                 if yearInt! < 1989 {
                     label.textColor = UIColor.darkGray
-                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                    label.someTextColorChange(fullText: label.text!, changeText: releaserYearText)
                 } else if yearInt! >= 1989 && yearInt! < 1999  {
                     label.textColor = UIColor.brown
-                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                    label.someTextColorChange(fullText: label.text!, changeText: releaserYearText)
                 } else if yearInt! >= 1999 && yearInt! < 2010 {
                     label.textColor = UIColor.purple
-                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                    label.someTextColorChange(fullText: label.text!, changeText: releaserYearText)
                 } else if yearInt! >= 2010 && yearInt! < 2017 {
                     label.textColor = UIColor.green
-                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                    label.someTextColorChange(fullText: label.text!, changeText: releaserYearText)
                 } else {
                     label.textColor = UIColor.orange
-                    label.someTextColorChange(fullText: label.text!, changeText: "Release Year: ")
+                    label.someTextColorChange(fullText: label.text!, changeText: releaserYearText)
                 }
             }
             if let imageView = self.imageView {
@@ -93,7 +95,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                     imageView.image = UIImage(named: "book")
                     imageView.layer.masksToBounds = true
                     imageView.layer.borderWidth = 2
-                    imageView.layer.borderColor = UIColor.lightGray.cgColor
+                    imageView.layer.borderColor = UIColor.clear.cgColor
                 }
             }
             if let ratingImageStars = self.ratingImageStars {
