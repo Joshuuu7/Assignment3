@@ -23,7 +23,7 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
 
     lazy var holmesStudentCenter = "340 Carroll Ave" + deKalb
     lazy var classicBooks = "115 N 1st St" + deKalb
-    lazy var villageComons = "901 Lucinda Ave k" + deKalb
+    lazy var villageCommons = "901 Lucinda Ave k" + deKalb
     lazy var dekalbPublicLibrary = "309 Oak St" + deKalb
     lazy var foundersMemorialLibrary = "217 Normal Rd" + deKalb
     lazy var davidCShapiroLibrary = "Swen Parson Hall, Northern Illinois University" + deKalb
@@ -44,7 +44,7 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
         //reverseGeocode(address: addressString + deKalb)
         reverseGeocode(address: holmesStudentCenter)
         reverseGeocode(address: classicBooks)
-        reverseGeocode(address: villageComons)
+        reverseGeocode(address: villageCommons)
         reverseGeocode(address: dekalbPublicLibrary)
         reverseGeocode(address: foundersMemorialLibrary)
         reverseGeocode(address: davidCShapiroLibrary)
@@ -57,7 +57,7 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         
-        let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+        let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
         mapView.setRegion(region, animated: true)
     }
     
@@ -109,7 +109,7 @@ class FindBookViewController: UIViewController, CLLocationManagerDelegate, MKMap
                 addressChange = "Holmes Student Center Book Store"
             } else if ( address == self.classicBooks ) {
                 addressChange = "Classic Books"
-            } else if ( address == self.villageComons) {
+            } else if ( address == self.villageCommons) {
                 addressChange = "Village Commons Book Store"
             } else if ( address == self.dekalbPublicLibrary ) {
                 addressChange = "Dekalb Public Library"
