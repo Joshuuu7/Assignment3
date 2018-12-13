@@ -159,7 +159,11 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 
                 self.errorSoundVibrate()
                 self.showAlertWithoutButton(title: "Enter a Book or Author!", message: "\n The book and author fields must be filled.")
-                //Check if title and author fields are already stored (basically if the same book is already stored).
+                
+                // Check if title and author fields are already stored (basically if the same book is already
+                // stored). However, if an author is already tored and a book title is already stored by a
+                // different author it still won't store it. Need a condition to grab the specific index of the
+                // selected book or author.
             } else if ( titleResults.count > 0 &&  authorResults.count > 0  ) {
                 
                 self.errorSoundVibrate()
@@ -183,7 +187,7 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
                 /*releaseYearTextField.layer.borderColor = UIColor.red as! CGColor
                  releaseYearTextField.layer.borderWidth = 1
                  releaseYearTextField.layer.cornerRadius = 5*/
-                //Add book to storage.
+                // Add book to storage.
             } else {
                 self.save(title: titleTextField.text!, author: authorTextField.text!, releaseYear: releaseYearTextField.text!, rating: ratingTextField.text!)
                 self.tableView.reloadData()

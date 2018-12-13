@@ -13,6 +13,8 @@ import CoreData
 class DetailViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var books: [Book] = []
     var managedObjectContext: NSManagedObjectContext? = nil
+
+    // MARK: - Outlets
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
@@ -21,6 +23,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var photoButton: UIButton!
     @IBOutlet weak var ratingImageStars: UIImageView!
+    @IBOutlet weak var findBookButton: UIButton!
     
     var imagePicker = UIImagePickerController()
     
@@ -104,12 +107,17 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         showAlert()
     }
     
+    @IBAction func findBookClick(_ sender: UIButton) {
+        performSegue(withIdentifier: "toPhotoViewController", sender: findBookButton )
+    }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        /*if segue.identifier == "toPhotoViewController" {
-         guard segue.destination is AttachPhotoViewController else {
-         return
-         }
-         }*/
+        if segue.identifier == "toPhotoViewController" {
+            guard segue.destination is AttachPhotoViewController else {
+                return
+            }
+        }
         //showAlert()
     }
     
@@ -143,14 +151,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         let imageName = "\(rating)Stars"
         return UIImage(named: imageName)
     }
-    
-    /*func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: NSDictionary!){
-     self.dismiss(animated: true, completion: { () -> Void in
-     
-     })
-     
-     imageView.image = image
-     }*/
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage

@@ -31,7 +31,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating Label" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2c-Mm-QtW">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating Label" textAlignment="right" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2c-Mm-QtW">
                                 <rect key="frame" x="190" y="152.5" width="80.5" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="Hed-lD-TYe"/>
@@ -76,12 +76,20 @@
                                     <constraint firstAttribute="height" constant="16" id="zZe-Ff-8j7"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNe-cj-IOq">
+                                <rect key="frame" x="128" y="518.5" width="118" height="30"/>
+                                <state key="normal" title="Find Book"/>
+                                <connections>
+                                    <action selector="findBookClick:" destination="CJD-GA-Unz" eventType="touchUpInside" id="BLL-Pq-Z7h"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="5Nh-69-b1j" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" constant="10" id="2dP-td-V2T"/>
                             <constraint firstItem="0ub-Sl-5LO" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" id="Ap0-ZL-tfx"/>
                             <constraint firstItem="F2c-Mm-QtW" firstAttribute="leading" secondItem="5Nh-69-b1j" secondAttribute="trailing" constant="50" id="CeN-p7-tGB"/>
+                            <constraint firstItem="MNe-cj-IOq" firstAttribute="top" secondItem="FHQ-oX-XID" secondAttribute="bottom" constant="20" id="Cyc-Z8-rV6"/>
                             <constraint firstItem="qRJ-6a-Cn6" firstAttribute="centerX" secondItem="2U9-yr-4BT" secondAttribute="centerX" id="Hp8-Qw-WnJ"/>
                             <constraint firstItem="0xC-hf-SN1" firstAttribute="trailing" secondItem="bAm-BA-16M" secondAttribute="trailing" constant="10" id="MAj-ub-3g9"/>
                             <constraint firstItem="fzR-OY-3GE" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" id="Qaf-mp-RVS"/>
@@ -95,6 +103,8 @@
                             <constraint firstItem="0xC-hf-SN1" firstAttribute="trailing" secondItem="0ub-Sl-5LO" secondAttribute="trailing" id="hpt-lI-sbd"/>
                             <constraint firstItem="FHQ-oX-XID" firstAttribute="top" secondItem="qRJ-6a-Cn6" secondAttribute="bottom" constant="10" id="mAK-rW-nQm"/>
                             <constraint firstItem="FHQ-oX-XID" firstAttribute="top" secondItem="qRJ-6a-Cn6" secondAttribute="bottom" constant="10" id="neJ-BD-Yjc"/>
+                            <constraint firstItem="0xC-hf-SN1" firstAttribute="trailing" secondItem="MNe-cj-IOq" secondAttribute="trailing" constant="129" id="pgM-VK-gom"/>
+                            <constraint firstItem="MNe-cj-IOq" firstAttribute="leading" secondItem="0xC-hf-SN1" secondAttribute="leading" constant="128" id="rtF-fS-Abt"/>
                             <constraint firstItem="bAm-BA-16M" firstAttribute="top" secondItem="0ub-Sl-5LO" secondAttribute="bottom" constant="20" id="ts3-HB-S40"/>
                             <constraint firstItem="0xC-hf-SN1" firstAttribute="trailing" secondItem="fzR-OY-3GE" secondAttribute="trailing" id="zMg-09-5ho"/>
                         </constraints>
@@ -102,6 +112,7 @@
                     </view>
                     <connections>
                         <outlet property="authorLabel" destination="0ub-Sl-5LO" id="C7b-Bh-plZ"/>
+                        <outlet property="findBookButton" destination="MNe-cj-IOq" id="CAO-2L-uQF"/>
                         <outlet property="imageView" destination="qRJ-6a-Cn6" id="jtO-7o-2ok"/>
                         <outlet property="photoButton" destination="FHQ-oX-XID" id="VrT-p1-ddZ"/>
                         <outlet property="ratingImageStars" destination="bAm-BA-16M" id="N6h-Rs-eag"/>
